@@ -1,13 +1,19 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class New {
+export class Metadata {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  title: string;
+  companyName: string;
 
   @Column()
-  content: string;
+  companyPhone: string;
+
+  @Column()
+  companyEmail: string;
+
+  @Column()
+  companyAddress: string;
 }

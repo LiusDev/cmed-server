@@ -6,7 +6,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class CreateNewDto {
+export class UpdateNewDto {
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()

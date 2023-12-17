@@ -1,12 +1,11 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { DeepPartial, Repository } from 'typeorm';
+import { User } from '../entities/user.entity';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 
@@ -38,18 +37,9 @@ export class UsersService {
     return await this.repo.save(newUser);
   }
 
-  async update(id: number, attrs: UpdateUserDto): Promise<User> {
-    const user = await this.findOne(id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    Object.assign(user, attrs);
-    return await this.repo.save(user);
-  }
-
-  async updatePartial(
+  async update(
     id: number,
-    attrs: Partial<UpdateUserDto>,
+    attrs: UpdateUserDto | Partial<UpdateUserDto>,
   ): Promise<User> {
     const user = await this.findOne(id);
     if (!user) {

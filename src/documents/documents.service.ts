@@ -1,37 +1,38 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { New } from '../entities/new.entity';
+import { Document } from 'src/entities/document.entity';
 import { Like, Repository } from 'typeorm';
-import { CreateNewDto } from './dtos/create-new.dto';
-import { UpdateNewDto } from './dtos/update-new.dto';
-import { CategoriesService } from 'src/categories/categories.service';
+import { CreateDocumentDto } from './dtos/create-document.dto';
 import { User } from 'src/entities/user.entity';
+import { CategoriesService } from 'src/categories/categories.service';
+import { UpdateDocumentDto } from './dtos/update-document.dto';
 
 @Injectable()
-export class NewsService {
+export class DocumentsService {
   constructor(
-    @InjectRepository(New) private readonly repo: Repository<New>,
+    @InjectRepository(Document)
+    private readonly repo: Repository<Document>,
     private readonly categoriesService: CategoriesService,
   ) {}
 
   async findAll({
-    title,
+    name,
     page = '1',
     perPage = '10',
     sortBy = 'id',
     order = 'ASC',
   }: {
-    title?: string;
+    name?: string;
     page?: string;
     perPage?: string;
     sortBy?: string;
     order?: string;
-  }): Promise<New[]> {
+  }): Promise<Document[]> {
     const validPage = parseInt(page) || 1;
     const validPerPage = parseInt(perPage) || 10;
 
     return await this.repo.find({
-      where: title ? { title: Like(`%${title}%`) } : {},
+      where: name ? { name: Like(`%${name}%`) } : {},
       order: {
         [sortBy]: order.toUpperCase(),
       },
@@ -40,12 +41,15 @@ export class NewsService {
     });
   }
 
-  async findOne(id: number): Promise<New> {
+  async findOne(id: number): Promise<Document> {
     return await this.repo.findOneBy({ id });
   }
 
-  async create(newItem: CreateNewDto, createdUser: User): Promise<New> {
-    const { title, description, featuredImage, content, categoryId } = newItem;
+  async create(
+    newItem: CreateDocumentDto,
+    createdUser: User,
+  ): Promise<Document> {
+    const { name, description, documentUrl, categoryId } = newItem;
 
     const category = await this.categoriesService.findOne(categoryId);
     if (!category) {
@@ -53,10 +57,9 @@ export class NewsService {
     }
 
     const item = this.repo.create({
-      title,
+      name,
       description,
-      featuredImage,
-      content,
+      documentUrl,
       category,
       createdBy: createdUser,
     });
@@ -66,35 +69,34 @@ export class NewsService {
 
   async update(
     id: number,
-    updateNew: UpdateNewDto | Partial<UpdateNewDto>,
+    updateItem: UpdateDocumentDto | Partial<UpdateDocumentDto>,
     modifiedUser: User,
-  ): Promise<New> {
+  ): Promise<Document> {
     const item = await this.repo.findOneBy({ id });
     if (!item) {
-      throw new NotFoundException('Not found');
+      throw new NotFoundException('Document not found');
     }
 
-    const { categoryId, ...rest } = updateNew;
+    const { categoryId, ...rest } = updateItem;
 
     if (categoryId) {
       const category = await this.categoriesService.findOne(categoryId);
       if (!category) {
         throw new NotFoundException('Category not found');
       }
-
       item.category = category;
     }
 
     Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
 
-    return this.repo.save(item);
+    return await this.repo.save(item);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number) {
     const item = await this.repo.findOneBy({ id });
     if (!item) {
-      throw new NotFoundException('Not found');
+      throw new NotFoundException('Document not found');
     }
 
     await this.repo.remove(item);

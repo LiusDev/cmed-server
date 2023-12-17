@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthCredentialsDto } from './dtos/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +21,7 @@ export class AuthService {
     const payload: JwtPayload = {
       sub: user.id,
       username: user.username,
+      name: user.name,
       role: user.role,
     };
     return payload;
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   async signUp(authCredentials: AuthCredentialsDto) {
-    const { username, password } = authCredentials;
+    const { username, password, name } = authCredentials;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -51,6 +52,7 @@ export class AuthService {
     const user = await this.usersService.create({
       username,
       password: hashedPassword,
+      name,
     });
 
     return this.getToken(user);

@@ -3,10 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Put,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -15,14 +17,19 @@ import { StandardUserDto } from './dtos/standard-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UserRole } from 'src/entities/user.entity';
+import { RequireRolesGuard } from 'src/auth/guards/require-roles.guard';
+import { RequireRoles } from 'src/auth/decorators/require-roles.decorator';
+import { Response } from 'express';
 
 @Controller('users')
 @Serialize(StandardUserDto)
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RequireRolesGuard)
+@RequireRoles(UserRole.ADMIN)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('all')
+  @Get()
   async findAll() {
     return this.usersService.findAll();
   }
@@ -47,11 +54,12 @@ export class UsersController {
     @Param('id') id: number,
     @Body() body: Partial<UpdateUserDto>,
   ) {
-    return this.usersService.updatePartial(id, body);
+    return this.usersService.update(id, body);
   }
 
   @Delete('/:id')
-  async remove(@Param('id') id: number) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: number, @Res() res: Response) {
+    this.usersService.remove(id);
+    res.status(HttpStatus.NO_CONTENT).send();
   }
 }

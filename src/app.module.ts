@@ -3,20 +3,41 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NewsModule } from './news/news.module';
-import { New } from './news/new.entity';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
-import { RefreshToken } from './auth/refresh-token.entity';
 import { ImagesModule } from './images/images.module';
 import { ConfigModule } from '@nestjs/config';
+import { New } from './entities/new.entity';
+import { User } from './entities/user.entity';
+import { Category } from './entities/category.entity';
+import { Contact } from './entities/contact.entity';
+import { Customer } from './entities/customer.entity';
+import { Document } from './entities/document.entity';
+import { Metadata } from './entities/metadata.entity';
+import { Partner } from './entities/partner.entity';
+import { Project } from './entities/project.entity';
+import { Service } from './entities/service.entity';
+import { Staff } from './entities/staff.entity';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [New, User, RefreshToken],
+      entities: [
+        Category,
+        Contact,
+        Customer,
+        Document,
+        Metadata,
+        New,
+        Partner,
+        Project,
+        Service,
+        Staff,
+        User,
+      ],
       synchronize: true,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
@@ -24,6 +45,7 @@ import { ConfigModule } from '@nestjs/config';
     UsersModule,
     AuthModule,
     ImagesModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
