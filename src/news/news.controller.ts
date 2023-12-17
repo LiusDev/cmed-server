@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -72,5 +73,11 @@ export class NewsController {
     @Body() body: Partial<CreateNewDto>,
   ): Promise<New> {
     return await this.newsService.updatePartial(id, body);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async deleteNews(@Param('id') id: number): Promise<void> {
+    await this.newsService.delete(id);
   }
 }

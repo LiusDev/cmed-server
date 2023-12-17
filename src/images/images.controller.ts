@@ -15,6 +15,5 @@ export class ImagesController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
     const result = await this.imagesService.uploadImage(file);
-    console.log(result);
   }
 }
