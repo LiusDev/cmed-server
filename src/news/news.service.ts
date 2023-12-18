@@ -31,6 +31,11 @@ export class NewsService {
     const validPerPage = parseInt(perPage) || 10;
 
     return await this.repo.find({
+      relations: {
+        category: true,
+        createdBy: true,
+        modifiedBy: true,
+      },
       where: title ? { title: Like(`%${title}%`) } : {},
       order: {
         [sortBy]: order.toUpperCase(),
@@ -41,7 +46,14 @@ export class NewsService {
   }
 
   async findOne(id: number): Promise<New> {
-    return await this.repo.findOneBy({ id });
+    return await this.repo.findOne({
+      relations: {
+        category: true,
+        createdBy: true,
+        modifiedBy: true,
+      },
+      where: { id },
+    });
   }
 
   async create(newItem: CreateNewDto, createdUser: User): Promise<New> {

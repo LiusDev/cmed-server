@@ -4,14 +4,9 @@ import { DocumentsService } from './documents.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Document } from 'src/entities/document.entity';
 import { CategoriesModule } from 'src/categories/categories.module';
-import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Document]),
-    CategoriesModule,
-    UsersModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Document]), CategoriesModule],
   controllers: [DocumentsController],
   providers: [DocumentsService],
 })

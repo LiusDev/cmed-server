@@ -1,7 +1,6 @@
 import { Expose } from 'class-transformer';
-import { CategoryDto } from 'src/categories/dtos/category.dto';
 
-export class NewDto {
+export class ProjectDto {
   @Expose()
   id: number;
 
@@ -12,20 +11,11 @@ export class NewDto {
   modifiedAt: Date;
 
   @Expose()
-  title: string;
+  name: string;
 
   @Expose()
   description: string;
 
   @Expose()
-  featuredImage: string;
-
-  @Expose()
   content: string;
-
-  @Expose()
-  view: number;
-
-  @Expose()
-  category: CategoryDto;
 }

@@ -1,16 +1,10 @@
-import {
-  IsBase64,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsBase64, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-export class CreateNewDto {
+export class UpdateServiceDto {
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()
-  title: string;
+  name: string;
 
   @IsString()
   @MaxLength(255)
@@ -24,7 +18,4 @@ export class CreateNewDto {
   @IsString()
   @IsNotEmpty()
   content: string;
-
-  @IsNumber()
-  categoryId: number;
 }

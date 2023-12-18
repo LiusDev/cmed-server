@@ -19,6 +19,11 @@ import { Project } from './entities/project.entity';
 import { Service } from './entities/service.entity';
 import { Staff } from './entities/staff.entity';
 import { CategoriesModule } from './categories/categories.module';
+import { DocumentsModule } from './documents/documents.module';
+import { PartnersModule } from './partners/partners.module';
+import { ProjectsModule } from './projects/projects.module';
+import { ServicesModule } from './services/services.module';
+import { StaffsModule } from './staffs/staffs.module';
 
 @Module({
   imports: [
@@ -45,7 +50,12 @@ import { CategoriesModule } from './categories/categories.module';
     UsersModule,
     AuthModule,
     ImagesModule,
+    DocumentsModule,
     CategoriesModule,
+    PartnersModule,
+    ProjectsModule,
+    ServicesModule,
+    StaffsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

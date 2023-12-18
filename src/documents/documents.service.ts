@@ -32,6 +32,11 @@ export class DocumentsService {
     const validPerPage = parseInt(perPage) || 10;
 
     return await this.repo.find({
+      relations: {
+        category: true,
+        createdBy: true,
+        modifiedBy: true,
+      },
       where: name ? { name: Like(`%${name}%`) } : {},
       order: {
         [sortBy]: order.toUpperCase(),
@@ -42,7 +47,14 @@ export class DocumentsService {
   }
 
   async findOne(id: number): Promise<Document> {
-    return await this.repo.findOneBy({ id });
+    return await this.repo.findOne({
+      relations: {
+        category: true,
+        createdBy: true,
+        modifiedBy: true,
+      },
+      where: { id },
+    });
   }
 
   async create(

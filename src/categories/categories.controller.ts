@@ -39,7 +39,7 @@ export class CategoriesController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(@Body() body: CreateCategoryDto, @GetUser() createdUser: User) {
-    return await this.categoriesService.create(createdUser, body);
+    return await this.categoriesService.create(body, createdUser);
   }
 
   @Put(':id')

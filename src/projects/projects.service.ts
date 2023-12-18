@@ -1,34 +1,30 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/entities/category.entity';
+import { Project } from 'src/entities/project.entity';
 import { Repository } from 'typeorm';
-import { CreateCategoryDto } from './dtos/create-category.dto';
-import { UsersService } from 'src/users/users.service';
-import { UpdateCategoryDto } from './dtos/update-category.dto';
+import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
+import { UpdateProjectDto } from './dtos/update-project.dto';
 
 @Injectable()
-export class CategoriesService {
+export class ProjectsService {
   constructor(
-    @InjectRepository(Category) private readonly repo: Repository<Category>,
+    @InjectRepository(Project)
+    private readonly repo: Repository<Project>,
   ) {}
 
-  async findAll(): Promise<Category[]> {
+  async findAll(): Promise<Project[]> {
     return await this.repo.find({
       relations: {
-        news: true,
-        documents: true,
         createdBy: true,
         modifiedBy: true,
       },
     });
   }
 
-  async findOne(id: number): Promise<Category> {
+  async findOne(id: number): Promise<Project> {
     return await this.repo.findOne({
       relations: {
-        news: true,
-        documents: true,
         createdBy: true,
         modifiedBy: true,
       },
@@ -36,14 +32,13 @@ export class CategoriesService {
     });
   }
 
-  async create(
-    newItem: CreateCategoryDto,
-    createdUser: User,
-  ): Promise<Category> {
-    const { name } = newItem;
+  async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
+    const { name, description, content } = newItem;
 
     const item = this.repo.create({
       name,
+      description,
+      content,
       createdBy: createdUser,
     });
 
@@ -52,12 +47,12 @@ export class CategoriesService {
 
   async update(
     id: number,
-    updateItem: UpdateCategoryDto | Partial<UpdateCategoryDto>,
+    updateItem: UpdateProjectDto | Partial<UpdateProjectDto>,
     modifiedUser: User,
-  ): Promise<Category> {
+  ): Promise<Project> {
     const item = await this.repo.findOneBy({ id });
     if (!item) {
-      throw new NotFoundException('Category not found');
+      throw new NotFoundException('Project not found');
     }
 
     Object.assign(item, updateItem);
@@ -66,12 +61,11 @@ export class CategoriesService {
     return await this.repo.save(item);
   }
 
-  async delete(id: number): Promise<Category> {
+  async remove(id: number): Promise<void> {
     const item = await this.repo.findOneBy({ id });
     if (!item) {
-      throw new NotFoundException('Category not found');
+      throw new NotFoundException('Project not found');
     }
-
-    return await this.repo.remove(item);
+    await this.repo.remove(item);
   }
 }
