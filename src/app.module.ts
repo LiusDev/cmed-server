@@ -24,6 +24,7 @@ import { PartnersModule } from './partners/partners.module';
 import { ProjectsModule } from './projects/projects.module';
 import { ServicesModule } from './services/services.module';
 import { StaffsModule } from './staffs/staffs.module';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { StaffsModule } from './staffs/staffs.module';
     ProjectsModule,
     ServicesModule,
     StaffsModule,
+    CustomersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
