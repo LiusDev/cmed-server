@@ -6,7 +6,7 @@ export class UpdatePartnerDto {
   @IsNotEmpty()
   name: string;
 
-  @IsBase64()
+  @IsString()
   @IsNotEmpty()
   image: string;
 }

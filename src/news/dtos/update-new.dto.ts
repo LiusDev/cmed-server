@@ -17,7 +17,7 @@ export class UpdateNewDto {
   @IsNotEmpty()
   description: string;
 
-  @IsBase64()
+  @IsString()
   featuredImage: string;
 
   @IsString()

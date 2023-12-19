@@ -11,7 +11,7 @@ export class CreateServiceDto {
   @IsNotEmpty()
   description: string;
 
-  @IsBase64()
+  @IsString()
   @IsNotEmpty()
   featuredImage: string;
 

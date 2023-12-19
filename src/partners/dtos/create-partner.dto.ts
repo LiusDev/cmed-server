@@ -6,7 +6,7 @@ export class CreatePartnerDto {
   @IsNotEmpty()
   name: string;
 
-  @IsBase64()
+  @IsString()
   @IsNotEmpty()
   image: string;
 }

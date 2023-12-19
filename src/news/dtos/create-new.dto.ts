@@ -17,7 +17,7 @@ export class CreateNewDto {
   @IsNotEmpty()
   description: string;
 
-  @IsBase64()
+  @IsString()
   @IsNotEmpty()
   featuredImage: string;
 

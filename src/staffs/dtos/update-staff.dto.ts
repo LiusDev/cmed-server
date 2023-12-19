@@ -1,7 +1,7 @@
 import { IsBase64, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class UpdateStaffDto {
-  @IsBase64()
+  @IsString()
   @IsNotEmpty()
   featuredImage: string;
 
