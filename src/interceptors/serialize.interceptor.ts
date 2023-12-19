@@ -17,16 +17,19 @@ export function Serialize(dto: ClassConstructor) {
 }
 
 class SerializeInterceptor implements NestInterceptor {
-  constructor(private dto: any) {}
+  constructor(private dto: ClassConstructor) {}
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     return next.handle().pipe(
       map((data: any) => {
+        console.log('data', data);
+
         return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true,
           enableImplicitConversion: true,
+          exposeUnsetFields: true,
         });
       }),
     );

@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { CategoryDto } from 'src/categories/dtos/category.dto';
+import { ChildCategoryDto } from 'src/categories/dtos/child-category.dto';
 
 export class NewDto {
   @Expose()
@@ -27,5 +27,5 @@ export class NewDto {
   view: number;
 
   @Expose()
-  category: CategoryDto;
+  category: ChildCategoryDto;
 }
