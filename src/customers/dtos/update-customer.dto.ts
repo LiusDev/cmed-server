@@ -9,4 +9,9 @@ export class UpdateCustomerDto {
   @IsString()
   @IsNotEmpty()
   image: string;
+
+  @IsString()
+  @MaxLength(255)
+  @IsNotEmpty()
+  description: string;
 }

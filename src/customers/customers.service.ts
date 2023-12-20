@@ -37,7 +37,7 @@ export class CustomersService {
     customer: CreateCustomerDto,
     createdUser: User,
   ): Promise<Customer> {
-    const { name, image } = customer;
+    const { name, image, description } = customer;
     const imageUrl = await this.imagesService.uploadBase64Image(
       'customers',
       image,
@@ -45,6 +45,7 @@ export class CustomersService {
     const newCustomer = this.repo.create({
       name,
       image: imageUrl,
+      description,
       createdBy: createdUser,
     });
     return await this.repo.save(newCustomer);

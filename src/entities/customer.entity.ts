@@ -23,6 +23,9 @@ export class Customer {
   name: string;
 
   @Column()
+  description: string;
+
+  @Column()
   image: string;
 
   @ManyToOne(() => User, (user) => user.createdCustomers)
