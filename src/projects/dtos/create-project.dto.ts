@@ -13,5 +13,9 @@ export class CreateProjectDto {
 
   @IsString()
   @IsNotEmpty()
+  featuredImage: string;
+
+  @IsString()
+  @IsNotEmpty()
   content: string;
 }

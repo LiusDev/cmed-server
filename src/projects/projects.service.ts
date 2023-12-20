@@ -5,12 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateProjectDto } from './dtos/update-project.dto';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private readonly repo: Repository<Project>,
+    private readonly imagesService: ImagesService,
   ) {}
 
   async findAll(): Promise<Project[]> {
@@ -33,11 +35,16 @@ export class ProjectsService {
   }
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
-    const { name, description, content } = newItem;
+    const { name, description, featuredImage, content } = newItem;
+    const imageUrl = await this.imagesService.uploadBase64Image(
+      'projects',
+      featuredImage,
+    );
 
     const item = this.repo.create({
       name,
       description,
+      featuredImage: imageUrl,
       content,
       createdBy: createdUser,
     });
@@ -54,7 +61,13 @@ export class ProjectsService {
     if (!item) {
       throw new NotFoundException('Project not found');
     }
-
+    if (updateItem.featuredImage) {
+      const imageUrl = await this.imagesService.uploadBase64Image(
+        'projects',
+        updateItem.featuredImage,
+      );
+      updateItem.featuredImage = imageUrl;
+    }
     Object.assign(item, updateItem);
     item.modifiedBy = modifiedUser;
 

@@ -13,5 +13,9 @@ export class UpdateProjectDto {
 
   @IsString()
   @IsNotEmpty()
+  featuredImage: string;
+
+  @IsString()
+  @IsNotEmpty()
   content: string;
 }

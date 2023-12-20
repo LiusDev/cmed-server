@@ -26,6 +26,9 @@ export class Project {
   description: string;
 
   @Column()
+  featuredImage: string;
+
+  @Column()
   content: string;
 
   @ManyToOne(() => User, (user) => user.createdProjects)
