@@ -1,4 +1,5 @@
 import { IsString } from 'class-validator';
+import { UserRole } from 'src/entities/user.entity';
 
 export class AuthCredentialsDto {
   @IsString()
@@ -9,4 +10,7 @@ export class AuthCredentialsDto {
 
   @IsString()
   name: string;
+
+  @IsString()
+  role: UserRole;
 }

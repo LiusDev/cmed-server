@@ -1,13 +1,15 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
+import { User, UserRole } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -28,12 +30,21 @@ export class UsersService {
   }
 
   async create(user: CreateUserDto): Promise<User> {
-    const checkUser = await this.findOneByUsername(user.username);
+    const { username, password, name, role } = user;
+    const checkUser = await this.findOneByUsername(username);
     if (checkUser) {
       throw new ConflictException('Username already exists');
     }
 
-    const newUser = this.repo.create(user);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = this.repo.create({
+      username,
+      password: hashedPassword,
+      name,
+      role,
+    });
     return await this.repo.save(newUser);
   }
 
@@ -45,6 +56,9 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    if (user.role === UserRole.ADMIN) {
+      throw new ForbiddenException('Cannot update admin user');
+    }
     Object.assign(user, attrs);
     return await this.repo.save(user);
   }
@@ -53,6 +67,9 @@ export class UsersService {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+    if (user.role === UserRole.ADMIN) {
+      throw new ForbiddenException('Cannot delete admin user');
     }
     await this.repo.remove(user);
   }

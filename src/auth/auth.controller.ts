@@ -8,15 +8,11 @@ import { GetUser } from './decorators/get-user.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
+import { updateProfileDto } from './dtos/update-profile.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  // @Post('signup')
-  // async signUp(@Body() authCredentials: AuthCredentialsDto) {
-  //   return await this.authService.signUp(authCredentials);
-  // }
 
   @Post('signin')
   @UseGuards(LocalAuthGuard)
@@ -36,4 +32,11 @@ export class AuthController {
   async getProfile(@GetUser() user: User) {
     return user;
   }
+
+  // @Post('profile')
+  // @UseGuards(JwtAuthGuard)
+  // @Serialize(StandardUserDto)
+  // async updateProfile(@Body() body: updateProfileDto, @GetUser() user: User) {
+  //   return await this.authService.updateProfile(user, body);
+  // }
 }
