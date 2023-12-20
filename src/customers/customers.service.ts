@@ -5,11 +5,13 @@ import { Repository } from 'typeorm';
 import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class CustomersService {
   constructor(
     @InjectRepository(Customer) private readonly repo: Repository<Customer>,
+    private readonly imagesService: ImagesService,
   ) {}
 
   async findAll(): Promise<Customer[]> {
@@ -36,9 +38,13 @@ export class CustomersService {
     createdUser: User,
   ): Promise<Customer> {
     const { name, image } = customer;
+    const imageUrl = await this.imagesService.uploadBase64Image(
+      'customers',
+      image,
+    );
     const newCustomer = this.repo.create({
       name,
-      image,
+      image: imageUrl,
       createdBy: createdUser,
     });
     return await this.repo.save(newCustomer);
@@ -53,7 +59,13 @@ export class CustomersService {
     if (!customerToUpdate) {
       throw new NotFoundException('Customer not found');
     }
-
+    if (customer.image) {
+      const imageUrl = await this.imagesService.uploadBase64Image(
+        'customers',
+        customer.image,
+      );
+      customer.image = imageUrl;
+    }
     Object.assign(customerToUpdate, customer);
     customerToUpdate.modifiedBy = modifiedUser;
 

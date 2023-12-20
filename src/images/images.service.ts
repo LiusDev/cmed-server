@@ -13,19 +13,39 @@ export class ImagesService {
     });
   }
 
-  async uploadImage(image: Express.Multer.File): Promise<string> {
+  async uploadBase64Image(folder: string, image: string): Promise<string> {
+    const base64Data = image.split(',')[1];
+    const imageBuffer = Buffer.from(base64Data, 'base64');
+
     return new Promise((res, rej) => {
       const theTransformStream = cloudinary.uploader.upload_stream(
         {
-          folder: 'cmed_news',
+          folder,
         },
         (err, result) => {
           if (err) return rej(err);
           res(result.url);
         },
       );
-      let str = Readable.from(image.buffer);
+      let str = Readable.from(imageBuffer);
       str.pipe(theTransformStream);
+    });
+  }
+
+  private getPublicIdFromUrl(imageUrl: string): string {
+    const splitUrl = imageUrl.split('/');
+    const folderName = splitUrl[splitUrl.length - 2];
+    const publicIdWithExtension = splitUrl[splitUrl.length - 1];
+    const publicId = folderName + '/' + publicIdWithExtension.split('.')[0];
+
+    return publicId;
+  }
+
+  async deleteImage(imageUrl: string): Promise<UploadApiResponse> {
+    const publicId = this.getPublicIdFromUrl(imageUrl);
+    return await cloudinary.api.delete_resources([publicId], {
+      type: 'upload',
+      resource_type: 'image',
     });
   }
 }

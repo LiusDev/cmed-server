@@ -5,11 +5,13 @@ import { Repository } from 'typeorm';
 import { CreateStaffDto } from './dtos/create-staff.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateStaffDto } from './dtos/update-staff.dto';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class StaffsService {
   constructor(
     @InjectRepository(Staff) private readonly repo: Repository<Staff>,
+    private readonly imagesService: ImagesService,
   ) {}
 
   async findAll() {
@@ -33,11 +35,14 @@ export class StaffsService {
 
   async create(newStaff: CreateStaffDto, createdUser: User) {
     const { name, position, featuredImage } = newStaff;
-
+    const imageUrl = await this.imagesService.uploadBase64Image(
+      'staffs',
+      featuredImage,
+    );
     const staff = this.repo.create({
       name,
       position,
-      featuredImage,
+      featuredImage: imageUrl,
       createdBy: createdUser,
     });
 
@@ -53,7 +58,13 @@ export class StaffsService {
     if (!staff) {
       throw new NotFoundException('Staff not found');
     }
-
+    if (updateStaff.featuredImage) {
+      const imageUrl = await this.imagesService.uploadBase64Image(
+        'staffs',
+        updateStaff.featuredImage,
+      );
+      updateStaff.featuredImage = imageUrl;
+    }
     Object.assign(staff, updateStaff);
     staff.modifiedBy = modifiedUser;
 

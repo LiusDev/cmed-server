@@ -5,12 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateServiceDto } from './dtos/create-service.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateServiceDto } from './dtos/update-service.dto';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class ServicesService {
   constructor(
     @InjectRepository(Service)
     private readonly repo: Repository<Service>,
+    private readonly imagesService: ImagesService,
   ) {}
 
   async findAll(): Promise<Service[]> {
@@ -34,11 +36,14 @@ export class ServicesService {
 
   async create(newItem: CreateServiceDto, createdUser: User): Promise<Service> {
     const { name, description, featuredImage, content } = newItem;
-
+    const imageUrl = await this.imagesService.uploadBase64Image(
+      'services',
+      featuredImage,
+    );
     const item = this.repo.create({
       name,
       description,
-      featuredImage,
+      featuredImage: imageUrl,
       content,
       createdBy: createdUser,
     });
@@ -55,7 +60,13 @@ export class ServicesService {
     if (!item) {
       throw new NotFoundException('Service not found');
     }
-
+    if (updateItem.featuredImage) {
+      const imageUrl = await this.imagesService.uploadBase64Image(
+        'services',
+        updateItem.featuredImage,
+      );
+      updateItem.featuredImage = imageUrl;
+    }
     Object.assign(item, updateItem);
     item.modifiedBy = modifiedUser;
 

@@ -1,19 +1,39 @@
 import {
+  Body,
   Controller,
+  Delete,
+  Param,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UploadImageDto } from './dtos/upload-image.dto';
+import { DeleteImageDto } from './dtos/delete-image.dto';
 
 @Controller('images')
+@UseGuards(JwtAuthGuard)
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
-  // @Post('upload')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async uploadImage(@UploadedFile() file: Express.Multer.File) {
-  //   const result = await this.imagesService.uploadImage(file);
-  // }
+  @Post(':folder')
+  async uploadImage(
+    @Param('folder') folder: string,
+    @Body() body: UploadImageDto,
+  ) {
+    const result = await this.imagesService.uploadBase64Image(
+      folder,
+      body.file,
+    );
+    console.log(result);
+  }
+
+  @Delete()
+  async deleteImage(@Body() body: DeleteImageDto) {
+    const result = await this.imagesService.deleteImage(body.url);
+    console.log(result);
+  }
 }
