@@ -31,6 +31,7 @@ export class DocumentsController {
     @Query()
     query: {
       name?: string;
+      description?: string;
       page?: string;
       perPage?: string;
       sortBy?: string;

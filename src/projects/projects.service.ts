@@ -1,26 +1,50 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from 'src/entities/project.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateProjectDto } from './dtos/update-project.dto';
-import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private readonly repo: Repository<Project>,
-    private readonly imagesService: ImagesService,
   ) {}
 
-  async findAll(): Promise<Project[]> {
+  async findAll({
+    name,
+    description,
+    page = '1',
+    perPage = '10',
+    sortBy = 'id',
+    order = 'ASC',
+  }: {
+    name?: string;
+    description?: string;
+    page?: string;
+    perPage?: string;
+    sortBy?: string;
+    order?: string;
+  }): Promise<Project[]> {
+    const validPage = parseInt(page) || 1;
+    const validPerPage = parseInt(perPage) || 10;
+
     return await this.repo.find({
       relations: {
         createdBy: true,
         modifiedBy: true,
       },
+      where: {
+        name: Like(`%${name || ''}%`),
+        description: Like(`%${description || ''}%`),
+      },
+      order: {
+        [sortBy]: order.toUpperCase(),
+      },
+      skip: (validPage - 1) * validPerPage,
+      take: validPerPage,
     });
   }
 

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -27,8 +28,18 @@ export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
   @Get()
-  async findAll() {
-    return await this.customersService.findAll();
+  async findAll(
+    @Query()
+    query: {
+      name?: string;
+      description?: string;
+      page?: string;
+      perPage?: string;
+      sortBy?: string;
+      order?: string;
+    },
+  ) {
+    return await this.customersService.findAll(query);
   }
 
   @Get(':id')

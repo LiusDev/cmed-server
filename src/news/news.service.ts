@@ -18,12 +18,14 @@ export class NewsService {
 
   async findAll({
     title,
+    description,
     page = '1',
     perPage = '10',
     sortBy = 'id',
     order = 'ASC',
   }: {
     title?: string;
+    description?: string;
     page?: string;
     perPage?: string;
     sortBy?: string;
@@ -38,7 +40,10 @@ export class NewsService {
         createdBy: true,
         modifiedBy: true,
       },
-      where: title ? { title: Like(`%${title}%`) } : {},
+      where: {
+        title: Like(`%${title || ''}%`),
+        description: Like(`%${description || ''}%`),
+      },
       order: {
         [sortBy]: order.toUpperCase(),
       },

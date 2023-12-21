@@ -17,12 +17,14 @@ export class DocumentsService {
 
   async findAll({
     name,
+    description,
     page = '1',
     perPage = '10',
     sortBy = 'id',
     order = 'ASC',
   }: {
     name?: string;
+    description?: string;
     page?: string;
     perPage?: string;
     sortBy?: string;
@@ -37,7 +39,10 @@ export class DocumentsService {
         createdBy: true,
         modifiedBy: true,
       },
-      where: name ? { name: Like(`%${name}%`) } : {},
+      where: {
+        name: Like(`%${name || ''}%`),
+        description: Like(`%${description || ''}%`),
+      },
       order: {
         [sortBy]: order.toUpperCase(),
       },

@@ -10,21 +10,32 @@ import {
   UseGuards,
   Param,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { StaffsService } from './staffs.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateStaffDto } from './dtos/create-staff.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/entities/user.entity';
-import { Response } from 'express';
+import { Response, query } from 'express';
 
 @Controller('staffs')
 export class StaffsController {
   constructor(private readonly staffsService: StaffsService) {}
 
   @Get()
-  async findAll() {
-    return await this.staffsService.findAll();
+  async findAll(
+    @Query()
+    query: {
+      name?: string;
+      position?: string;
+      page?: string;
+      perPage?: string;
+      sortBy?: string;
+      order?: string;
+    },
+  ) {
+    return await this.staffsService.findAll(query);
   }
 
   @Get(':id')

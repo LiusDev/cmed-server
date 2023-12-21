@@ -34,6 +34,7 @@ export class NewsController {
     @Query()
     query: {
       title?: string;
+      description?: string;
       page?: string;
       perPage?: string;
       sortBy?: string;

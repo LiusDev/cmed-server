@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Partner } from 'src/entities/partner.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreatePartnerDto } from './dtos/create-partner.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdatePartnerDto } from './dtos/update-partner.dto';
@@ -15,12 +15,35 @@ export class PartnersService {
     private readonly imagesService: ImagesService,
   ) {}
 
-  async findAll(): Promise<Partner[]> {
+  async findAll({
+    name,
+    page = '1',
+    perPage = '10',
+    sortBy = 'id',
+    order = 'ASC',
+  }: {
+    name?: string;
+    page?: string;
+    perPage?: string;
+    sortBy?: string;
+    order?: string;
+  }): Promise<Partner[]> {
+    const validPage = parseInt(page) || 1;
+    const validPerPage = parseInt(perPage) || 10;
+
     return await this.repo.find({
       relations: {
         createdBy: true,
         modifiedBy: true,
       },
+      where: {
+        name: Like(`%${name || ''}%`),
+      },
+      order: {
+        [sortBy]: order.toUpperCase(),
+      },
+      skip: (validPage - 1) * validPerPage,
+      take: validPerPage,
     });
   }
 
