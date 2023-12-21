@@ -11,8 +11,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  app.use(json({ limit: '20mb' }));
-  app.use(urlencoded({ extended: true, limit: '20mb' }));
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.enableCors();
   await app.listen(3000);
 }

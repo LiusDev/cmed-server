@@ -66,15 +66,10 @@ export class NewsService {
       throw new NotFoundException('Category not found');
     }
 
-    const featuredImageURL = await this.imagesService.uploadBase64Image(
-      'news',
-      featuredImage,
-    );
-
     const item = this.repo.create({
       title,
       description,
-      featuredImage: featuredImageURL,
+      featuredImage,
       content,
       category,
       createdBy: createdUser,
@@ -102,15 +97,6 @@ export class NewsService {
       }
 
       item.category = category;
-    }
-
-    if (featuredImage) {
-      this.imagesService.deleteImage(item.featuredImage);
-      const featuredImageURL = await this.imagesService.uploadBase64Image(
-        'news',
-        featuredImage,
-      );
-      item.featuredImage = featuredImageURL;
     }
 
     Object.assign(item, rest);

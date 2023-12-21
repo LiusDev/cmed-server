@@ -36,15 +36,11 @@ export class ProjectsService {
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
     const { name, description, featuredImage, content } = newItem;
-    const imageUrl = await this.imagesService.uploadBase64Image(
-      'projects',
-      featuredImage,
-    );
 
     const item = this.repo.create({
       name,
       description,
-      featuredImage: imageUrl,
+      featuredImage,
       content,
       createdBy: createdUser,
     });
@@ -61,13 +57,7 @@ export class ProjectsService {
     if (!item) {
       throw new NotFoundException('Project not found');
     }
-    if (updateItem.featuredImage) {
-      const imageUrl = await this.imagesService.uploadBase64Image(
-        'projects',
-        updateItem.featuredImage,
-      );
-      updateItem.featuredImage = imageUrl;
-    }
+
     Object.assign(item, updateItem);
     item.modifiedBy = modifiedUser;
 

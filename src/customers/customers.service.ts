@@ -38,13 +38,10 @@ export class CustomersService {
     createdUser: User,
   ): Promise<Customer> {
     const { name, image, description } = customer;
-    const imageUrl = await this.imagesService.uploadBase64Image(
-      'customers',
-      image,
-    );
+
     const newCustomer = this.repo.create({
       name,
-      image: imageUrl,
+      image,
       description,
       createdBy: createdUser,
     });
@@ -60,13 +57,7 @@ export class CustomersService {
     if (!customerToUpdate) {
       throw new NotFoundException('Customer not found');
     }
-    if (customer.image) {
-      const imageUrl = await this.imagesService.uploadBase64Image(
-        'customers',
-        customer.image,
-      );
-      customer.image = imageUrl;
-    }
+
     Object.assign(customerToUpdate, customer);
     customerToUpdate.modifiedBy = modifiedUser;
 

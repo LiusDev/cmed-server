@@ -37,14 +37,9 @@ export class PartnersService {
   async create(partner: CreatePartnerDto, createdUser: User): Promise<Partner> {
     const { name, image } = partner;
 
-    const imageUrl = await this.imagesService.uploadBase64Image(
-      'partners',
-      image,
-    );
-
     const newPartner = this.repo.create({
       name,
-      image: imageUrl,
+      image,
       createdBy: createdUser,
     });
     return await this.repo.save(newPartner);
@@ -60,13 +55,6 @@ export class PartnersService {
       throw new NotFoundException('Partner not found');
     }
 
-    if (partner.image) {
-      const imageUrl = await this.imagesService.uploadBase64Image(
-        'partners',
-        partner.image,
-      );
-      partner.image = imageUrl;
-    }
     Object.assign(partnerToUpdate, partner);
     partnerToUpdate.modifiedBy = modifiedUser;
 

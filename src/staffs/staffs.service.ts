@@ -35,14 +35,11 @@ export class StaffsService {
 
   async create(newStaff: CreateStaffDto, createdUser: User) {
     const { name, position, featuredImage } = newStaff;
-    const imageUrl = await this.imagesService.uploadBase64Image(
-      'staffs',
-      featuredImage,
-    );
+
     const staff = this.repo.create({
       name,
       position,
-      featuredImage: imageUrl,
+      featuredImage,
       createdBy: createdUser,
     });
 
@@ -58,13 +55,7 @@ export class StaffsService {
     if (!staff) {
       throw new NotFoundException('Staff not found');
     }
-    if (updateStaff.featuredImage) {
-      const imageUrl = await this.imagesService.uploadBase64Image(
-        'staffs',
-        updateStaff.featuredImage,
-      );
-      updateStaff.featuredImage = imageUrl;
-    }
+
     Object.assign(staff, updateStaff);
     staff.modifiedBy = modifiedUser;
 

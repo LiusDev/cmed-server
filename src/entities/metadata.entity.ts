@@ -5,15 +5,15 @@ export class Metadata {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: '' })
   companyName: string;
 
-  @Column()
+  @Column({ default: '' })
   companyPhone: string;
 
-  @Column()
+  @Column({ default: '' })
   companyEmail: string;
 
-  @Column()
+  @Column({ default: '' })
   companyAddress: string;
 }
