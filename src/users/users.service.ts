@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from '../entities/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -17,8 +17,35 @@ export class UsersService {
     @InjectRepository(User) private readonly repo: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.repo.find();
+  async findAll({
+    username,
+    name,
+    page = '1',
+    perPage = '10',
+    sortBy = 'id',
+    order = 'ASC',
+  }: {
+    username?: string;
+    name?: string;
+    page?: string;
+    perPage?: string;
+    sortBy?: string;
+    order?: string;
+  }): Promise<User[]> {
+    const validPage = parseInt(page) || 1;
+    const validPerPage = parseInt(perPage) || 10;
+
+    return await this.repo.find({
+      where: {
+        username: username ? Like(`%${username}%`) : undefined,
+        name: name ? Like(`%${name}%`) : undefined,
+      },
+      order: {
+        [sortBy]: order.toUpperCase(),
+      },
+      skip: (validPage - 1) * validPerPage,
+      take: validPerPage,
+    });
   }
 
   async findOne(id: number): Promise<User> {

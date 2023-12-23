@@ -10,6 +10,7 @@ import {
   UseGuards,
   Param,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
@@ -26,8 +27,18 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
-  async findAll() {
-    return await this.servicesService.findAll();
+  async findAll(
+    @Query()
+    query: {
+      name?: string;
+      description?: string;
+      page?: string;
+      perPage?: string;
+      sortBy?: string;
+      order?: string;
+    },
+  ) {
+    return await this.servicesService.findAll(query);
   }
 
   @Get(':id')

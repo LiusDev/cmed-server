@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -27,8 +28,18 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
-  async findAll() {
-    return await this.categoriesService.findAll();
+  async findAll(
+    @Query()
+    query: {
+      name?: string;
+      description?: string;
+      page?: string;
+      perPage?: string;
+      sortBy?: string;
+      order?: string;
+    },
+  ) {
+    return await this.categoriesService.findAll(query);
   }
 
   @Get(':id')

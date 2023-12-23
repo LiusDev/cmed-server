@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/category.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UsersService } from 'src/users/users.service';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
@@ -13,7 +13,22 @@ export class CategoriesService {
     @InjectRepository(Category) private readonly repo: Repository<Category>,
   ) {}
 
-  async findAll(): Promise<Category[]> {
+  async findAll({
+    name,
+    page = '1',
+    perPage = '10',
+    sortBy = 'id',
+    order = 'ASC',
+  }: {
+    name?: string;
+    page?: string;
+    perPage?: string;
+    sortBy?: string;
+    order?: string;
+  }): Promise<Category[]> {
+    const validPage = parseInt(page) || 1;
+    const validPerPage = parseInt(perPage) || 10;
+
     return await this.repo.find({
       relations: {
         news: true,
@@ -21,6 +36,14 @@ export class CategoriesService {
         createdBy: true,
         modifiedBy: true,
       },
+      where: {
+        name: Like(`%${name || ''}%`),
+      },
+      order: {
+        [sortBy]: order.toUpperCase(),
+      },
+      skip: (validPage - 1) * validPerPage,
+      take: validPerPage,
     });
   }
 

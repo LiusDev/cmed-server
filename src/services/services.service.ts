@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Service } from 'src/entities/service.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateServiceDto } from './dtos/create-service.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateServiceDto } from './dtos/update-service.dto';
@@ -15,12 +15,38 @@ export class ServicesService {
     private readonly imagesService: ImagesService,
   ) {}
 
-  async findAll(): Promise<Service[]> {
+  async findAll({
+    name,
+    description,
+    page = '1',
+    perPage = '10',
+    sortBy = 'id',
+    order = 'ASC',
+  }: {
+    name?: string;
+    description?: string;
+    page?: string;
+    perPage?: string;
+    sortBy?: string;
+    order?: string;
+  }): Promise<Service[]> {
+    const validPage = parseInt(page) || 1;
+    const validPerPage = parseInt(perPage) || 10;
+
     return await this.repo.find({
       relations: {
         createdBy: true,
         modifiedBy: true,
       },
+      where: {
+        name: Like(`%${name || ''}%`),
+        description: Like(`%${description || ''}%`),
+      },
+      order: {
+        [sortBy]: order.toUpperCase(),
+      },
+      skip: (validPage - 1) * validPerPage,
+      take: validPerPage,
     });
   }
 
