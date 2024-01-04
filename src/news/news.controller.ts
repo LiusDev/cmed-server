@@ -35,6 +35,7 @@ export class NewsController {
     query: {
       title?: string;
       description?: string;
+      category?: string;
       page?: string;
       perPage?: string;
       sortBy?: string;

@@ -19,6 +19,7 @@ export class NewsService {
   async findAll({
     title,
     description,
+    category,
     page = '1',
     perPage = '10',
     sortBy = 'id',
@@ -26,6 +27,7 @@ export class NewsService {
   }: {
     title?: string;
     description?: string;
+    category?: string;
     page?: string;
     perPage?: string;
     sortBy?: string;
@@ -33,6 +35,7 @@ export class NewsService {
   }): Promise<New[]> {
     const validPage = parseInt(page) || 1;
     const validPerPage = parseInt(perPage) || 10;
+    const validCategory = parseInt(category) || 0;
 
     return await this.repo.find({
       relations: {
@@ -43,6 +46,7 @@ export class NewsService {
       where: {
         title: Like(`%${title || ''}%`),
         description: Like(`%${description || ''}%`),
+        ...(validCategory ? { category: { id: validCategory } } : {}),
       },
       order: {
         [sortBy]: order.toUpperCase(),

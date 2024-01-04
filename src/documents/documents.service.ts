@@ -18,6 +18,7 @@ export class DocumentsService {
   async findAll({
     name,
     description,
+    category,
     page = '1',
     perPage = '10',
     sortBy = 'id',
@@ -25,6 +26,7 @@ export class DocumentsService {
   }: {
     name?: string;
     description?: string;
+    category?: string;
     page?: string;
     perPage?: string;
     sortBy?: string;
@@ -32,6 +34,7 @@ export class DocumentsService {
   }): Promise<Document[]> {
     const validPage = parseInt(page) || 1;
     const validPerPage = parseInt(perPage) || 10;
+    const validCategory = parseInt(category) || 0;
 
     return await this.repo.find({
       relations: {
@@ -42,6 +45,7 @@ export class DocumentsService {
       where: {
         name: Like(`%${name || ''}%`),
         description: Like(`%${description || ''}%`),
+        ...(validCategory ? { category: { id: validCategory } } : {}),
       },
       order: {
         [sortBy]: order.toUpperCase(),
