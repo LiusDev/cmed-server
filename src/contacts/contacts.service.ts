@@ -18,7 +18,7 @@ export class ContactsService {
     page = '1',
     perPage = '10',
     sortBy = 'id',
-    order = 'ASC',
+    order = 'DESC',
   }: {
     name?: string;
     phone?: string;

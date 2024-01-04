@@ -23,7 +23,7 @@ export class UsersService {
     page = '1',
     perPage = '10',
     sortBy = 'id',
-    order = 'ASC',
+    order = 'DESC',
   }: {
     username?: string;
     name?: string;

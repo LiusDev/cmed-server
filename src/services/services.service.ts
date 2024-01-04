@@ -21,7 +21,7 @@ export class ServicesService {
     page = '1',
     perPage = '10',
     sortBy = 'id',
-    order = 'ASC',
+    order = 'DESC',
   }: {
     name?: string;
     description?: string;

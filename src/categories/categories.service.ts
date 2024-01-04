@@ -18,7 +18,7 @@ export class CategoriesService {
     page = '1',
     perPage = '10',
     sortBy = 'id',
-    order = 'ASC',
+    order = 'DESC',
   }: {
     name?: string;
     page?: string;
