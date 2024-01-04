@@ -45,6 +45,18 @@ export class NewsController {
     return await this.newsService.findAll(query);
   }
 
+  @Get('count')
+  async countAllNews(
+    @Query()
+    query: {
+      title?: string;
+      description?: string;
+      category?: string;
+    },
+  ): Promise<number> {
+    return await this.newsService.countAll(query);
+  }
+
   @Get(':id')
   async getOneNews(@Param('id') id: number): Promise<New> {
     const result = await this.newsService.findOne(id);

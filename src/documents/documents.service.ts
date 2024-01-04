@@ -55,6 +55,26 @@ export class DocumentsService {
     });
   }
 
+  async countAll({
+    name,
+    description,
+    category,
+  }: {
+    name?: string;
+    description?: string;
+    category?: string;
+  }): Promise<number> {
+    const validCategory = parseInt(category) || 0;
+
+    return await this.repo.count({
+      where: {
+        name: Like(`%${name || ''}%`),
+        description: Like(`%${description || ''}%`),
+        ...(validCategory ? { category: { id: validCategory } } : {}),
+      },
+    });
+  }
+
   async findOne(id: number): Promise<Document> {
     return await this.repo.findOne({
       relations: {

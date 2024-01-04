@@ -56,6 +56,26 @@ export class NewsService {
     });
   }
 
+  async countAll({
+    title,
+    description,
+    category,
+  }: {
+    title?: string;
+    description?: string;
+    category?: string;
+  }): Promise<number> {
+    const validCategory = parseInt(category) || 0;
+
+    return await this.repo.count({
+      where: {
+        title: Like(`%${title || ''}%`),
+        description: Like(`%${description || ''}%`),
+        ...(validCategory ? { category: { id: validCategory } } : {}),
+      },
+    });
+  }
+
   async findOne(id: number): Promise<New> {
     return await this.repo.findOne({
       relations: {

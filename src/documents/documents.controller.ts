@@ -42,6 +42,18 @@ export class DocumentsController {
     return await this.documentsService.findAll(query);
   }
 
+  @Get('count')
+  async countAll(
+    @Query()
+    query: {
+      name?: string;
+      description?: string;
+      category?: string;
+    },
+  ) {
+    return await this.documentsService.countAll(query);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return await this.documentsService.findOne(id);
