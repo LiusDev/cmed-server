@@ -31,7 +31,7 @@ export class ProjectsController {
   async findAll(
     @Query()
     query: {
-      title?: string;
+      name?: string;
       description?: string;
       page?: string;
       perPage?: string;
