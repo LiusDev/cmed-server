@@ -42,6 +42,17 @@ export class ProjectsController {
     return await this.projectsService.findAll(query);
   }
 
+  @Get('count')
+  async count(
+    @Query()
+    query: {
+      name?: string;
+      description?: string;
+    },
+  ) {
+    return await this.projectsService.count(query);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return await this.projectsService.findOne(id);

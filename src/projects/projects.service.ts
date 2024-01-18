@@ -48,6 +48,21 @@ export class ProjectsService {
     });
   }
 
+  async count({
+    name,
+    description,
+  }: {
+    name?: string;
+    description?: string;
+  }): Promise<number> {
+    return await this.repo.count({
+      where: {
+        name: Like(`%${name || ''}%`),
+        description: Like(`%${description || ''}%`),
+      },
+    });
+  }
+
   async findOne(id: number): Promise<Project> {
     return await this.repo.findOne({
       relations: {
