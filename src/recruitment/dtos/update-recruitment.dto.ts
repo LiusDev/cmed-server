@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsDate,
+  IsDateString,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
 export class UpdateRecruitmentDto {
   @IsString()
@@ -6,7 +12,7 @@ export class UpdateRecruitmentDto {
   @IsNotEmpty()
   title: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   deadline: string;
 
