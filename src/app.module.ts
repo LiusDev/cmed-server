@@ -27,6 +27,8 @@ import { StaffsModule } from './staffs/staffs.module';
 import { CustomersModule } from './customers/customers.module';
 import { MetadataModule } from './metadata/metadata.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { RecruitmentModule } from './recruitment/recruitment.module';
+import { Recruitment } from './entities/recruitment.entity';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import { ContactsModule } from './contacts/contacts.module';
         Service,
         Staff,
         User,
+        Recruitment,
       ],
       synchronize: true,
     }),
@@ -62,6 +65,7 @@ import { ContactsModule } from './contacts/contacts.module';
     CustomersModule,
     MetadataModule,
     ContactsModule,
+    RecruitmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

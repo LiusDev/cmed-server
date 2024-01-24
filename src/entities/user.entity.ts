@@ -14,6 +14,7 @@ import { Staff } from './staff.entity';
 import { Service } from './service.entity';
 import { Partner } from './partner.entity';
 import { Customer } from './customer.entity';
+import { Recruitment } from './recruitment.entity';
 
 export enum UserRole {
   STAFF = 'staff',
@@ -90,4 +91,10 @@ export class User {
 
   @OneToMany(() => Customer, (customers) => customers.modifiedBy)
   modifiedCustomers: Customer[];
+
+  @OneToMany(() => Recruitment, (recruitment) => recruitment.createdBy)
+  createdRecruitments: Recruitment[];
+
+  @OneToMany(() => Recruitment, (recruitment) => recruitment.modifiedBy)
+  modifiedRecruitments: Recruitment[];
 }
