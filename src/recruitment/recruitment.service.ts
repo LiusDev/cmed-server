@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recruitment } from 'src/entities/recruitment.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateRecruitmentDto } from './dtos/create-recruitment.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateRecruitmentDto } from './dtos/update-recruitment.dto';
@@ -35,7 +35,7 @@ export class RecruitmentService {
         modifiedBy: true,
       },
       where: {
-        title: title,
+        title: Like(`%${title || ''}%`),
       },
       order: {
         [sortBy]: order.toUpperCase(),
