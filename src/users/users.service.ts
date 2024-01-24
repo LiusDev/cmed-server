@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  OnModuleInit,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from '../entities/user.entity';
@@ -12,10 +13,22 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
   constructor(
     @InjectRepository(User) private readonly repo: Repository<User>,
   ) {}
+
+  async onModuleInit() {
+    const admin = await this.repo.findOne({ where: { role: UserRole.ADMIN } });
+    if (!admin) {
+      await this.create({
+        username: 'admin',
+        password: 'admin',
+        name: 'Admin',
+        role: UserRole.ADMIN,
+      });
+    }
+  }
 
   async findAll({
     username,
