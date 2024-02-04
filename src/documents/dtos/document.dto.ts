@@ -18,7 +18,7 @@ export class DocumentDto {
   description: string;
 
   @Expose()
-  documentUrl: string;
+  document: string;
 
   @Expose()
   view: number;

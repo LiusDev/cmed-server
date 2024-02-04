@@ -27,7 +27,7 @@ export class Document {
   description: string;
 
   @Column()
-  documentUrl: string;
+  document: string;
 
   @Column({ default: 0 })
   view: number;

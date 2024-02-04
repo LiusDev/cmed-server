@@ -11,11 +11,6 @@ export class CreateDocumentDto {
   @IsNotEmpty()
   description: string;
 
-  @IsString()
-  @IsNotEmpty()
-  documentUrl: string;
-
-  @IsNumber()
   @IsNotEmpty()
   categoryId: number;
 }

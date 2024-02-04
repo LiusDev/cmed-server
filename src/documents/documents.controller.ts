@@ -10,7 +10,9 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { DocumentDto } from './dtos/document.dto';
@@ -20,6 +22,8 @@ import { CreateDocumentDto } from './dtos/create-document.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/entities/user.entity';
 import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateDocumentDto } from './dtos/update-document.dto';
 
 @Controller('documents')
 @Serialize(DocumentDto)
@@ -61,28 +65,37 @@ export class DocumentsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() body: CreateDocumentDto, @GetUser() createdUser: User) {
-    return await this.documentsService.create(body, createdUser);
+  @UseInterceptors(FileInterceptor('document'))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: CreateDocumentDto,
+    @GetUser() createdUser: User,
+  ) {
+    return await this.documentsService.create(body, file, createdUser);
   }
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('document'))
   async update(
     @Param('id') id: number,
-    @Body() body: CreateDocumentDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: UpdateDocumentDto,
     @GetUser() modifiedUser: User,
   ) {
-    return await this.documentsService.update(id, body, modifiedUser);
+    return await this.documentsService.update(id, file, body, modifiedUser);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('document'))
   async updatePartial(
     @Param('id') id: number,
-    @Body() body: CreateDocumentDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: Partial<UpdateDocumentDto>,
     @GetUser() modifiedUser: User,
   ) {
-    return await this.documentsService.update(id, body, modifiedUser);
+    return await this.documentsService.update(id, file, body, modifiedUser);
   }
 
   @Delete(':id')
