@@ -3,13 +3,9 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import * as bcrypt from 'bcrypt';
-import { AuthCredentialsDto } from './dtos/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { User } from 'src/entities/user.entity';
-import { updateProfileDto } from './dtos/update-profile.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -69,7 +65,7 @@ export class AuthService {
       throw new NotFoundException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = user.password === password;
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }

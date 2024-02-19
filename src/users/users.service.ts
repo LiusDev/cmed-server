@@ -10,7 +10,6 @@ import { User, UserRole } from '../entities/user.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -76,12 +75,9 @@ export class UsersService implements OnModuleInit {
       throw new ConflictException('Username already exists');
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     const newUser = this.repo.create({
       username,
-      password: hashedPassword,
+      password,
       name,
       role,
     });
