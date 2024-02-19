@@ -12,7 +12,7 @@ async function bootstrap() {
   const clientUrls = configService.get('CLIENT_URLS').split(',');
   console.log('clientUrls', clientUrls);
 
-  app.setGlobalPrefix('/api/v1');
+  app.setGlobalPrefix('/v1');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
