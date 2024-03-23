@@ -5,6 +5,9 @@ export class CreateDocumentDto {
   @MaxLength(255)
   @IsNotEmpty()
   name: string;
+  @IsString()
+  @IsNotEmpty()
+  featuredImage: string;
 
   @IsString()
   @MaxLength(255)

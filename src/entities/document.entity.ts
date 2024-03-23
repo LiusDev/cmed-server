@@ -20,6 +20,11 @@ export class Document {
   @UpdateDateColumn()
   modifiedAt: Date;
 
+  @Column("text")
+  featuredImage: string;
+
+  logo: string;
+
   @Column()
   name: string;
 

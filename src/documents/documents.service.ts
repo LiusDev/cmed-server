@@ -9,6 +9,7 @@ import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { join } from 'path';
 import { promises as fs } from 'fs';
 import { ConfigService } from '@nestjs/config';
+import { toWebp } from '../utils';
 
 @Injectable()
 export class DocumentsService {
@@ -17,7 +18,7 @@ export class DocumentsService {
     private readonly repo: Repository<Document>,
     private readonly categoriesService: CategoriesService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
   async findAll({
     name,
     description,
@@ -113,6 +114,7 @@ export class DocumentsService {
       name,
       description,
       document: fileUrl,
+      featuredImage: await toWebp(newItem.featuredImage),
       category,
       createdBy: createdUser,
     });
@@ -162,6 +164,9 @@ export class DocumentsService {
     }
 
     Object.assign(item, rest);
+    if (updateItem.featuredImage) {
+      item.featuredImage = await toWebp(updateItem.featuredImage)
+    }
     item.modifiedBy = modifiedUser;
 
     return await this.repo.save(item);

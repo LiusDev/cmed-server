@@ -12,6 +12,9 @@ export class DocumentDto {
   modifiedAt: Date;
 
   @Expose()
+  featuredImage: string;
+
+  @Expose()
   name: string;
 
   @Expose()

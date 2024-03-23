@@ -14,4 +14,7 @@ export class UpdateDocumentDto {
   @IsNumber()
   @IsNotEmpty()
   categoryId: number;
+
+  @IsString()
+  featuredImage: string;
 }
