@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ContactDto } from './dto/contact.dto';
 import { ContactsService } from './contacts.service';
@@ -28,9 +28,9 @@ export class ContactsController {
     return await this.contactsService.getContacts(query);
   }
 
-  @Get('/:id')
+  @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async getContact(id: number) {
+  async getContact(@Param("id") id: number) {
     return await this.contactsService.getContact(id);
   }
 

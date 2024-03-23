@@ -24,7 +24,6 @@ export class CreateContactDto {
 
   @IsString()
   @MaxLength(255)
-  @IsNotEmpty()
   company: string;
 
   @IsString()
