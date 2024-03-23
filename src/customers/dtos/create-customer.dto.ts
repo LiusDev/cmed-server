@@ -11,6 +11,14 @@ export class CreateCustomerDto {
   image: string;
 
   @IsString()
+  @IsNotEmpty()
+  logo: string;
+
+  @IsString()
+  @IsNotEmpty()
+  icon: string;
+
+  @IsString()
   @MaxLength(255)
   @IsNotEmpty()
   description: string;

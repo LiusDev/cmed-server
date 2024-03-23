@@ -19,4 +19,10 @@ export class CustomerDto {
 
   @Expose()
   image: string;
+
+  @Expose()
+  logo: string;
+
+  @Expose()
+  icon: string;
 }

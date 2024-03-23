@@ -7,8 +7,13 @@ export class UpdateCustomerDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
   image: string;
+
+  @IsString()
+  logo: string;
+
+  @IsString()
+  icon: string;
 
   @IsString()
   @MaxLength(255)

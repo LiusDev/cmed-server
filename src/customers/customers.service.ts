@@ -6,13 +6,14 @@ import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { ImagesService } from 'src/images/images.service';
+import { toWebp } from '../utils';
 
 @Injectable()
 export class CustomersService {
   constructor(
     @InjectRepository(Customer) private readonly repo: Repository<Customer>,
     private readonly imagesService: ImagesService,
-  ) {}
+  ) { }
 
   async findAll({
     name,
@@ -63,11 +64,13 @@ export class CustomersService {
     customer: CreateCustomerDto,
     createdUser: User,
   ): Promise<Customer> {
-    const { name, image, description } = customer;
+    const { name, image, description, logo, icon } = customer;
 
     const newCustomer = this.repo.create({
       name,
-      image,
+      image: await toWebp(image),
+      logo: await toWebp(logo),
+      icon: await toWebp(icon),
       description,
       createdBy: createdUser,
     });
@@ -85,6 +88,18 @@ export class CustomersService {
     }
 
     Object.assign(customerToUpdate, customer);
+    if (customer.image) {
+      customerToUpdate.image = await toWebp(customer.image)
+    }
+
+    if (customer.logo) {
+      customerToUpdate.logo = await toWebp(customer.logo)
+    }
+
+    if (customer.icon) {
+      customerToUpdate.icon = await toWebp(customer.icon)
+    }
+
     customerToUpdate.modifiedBy = modifiedUser;
 
     return await this.repo.save(customerToUpdate);
