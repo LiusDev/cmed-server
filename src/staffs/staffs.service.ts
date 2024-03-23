@@ -58,12 +58,13 @@ export class StaffsService {
   }
 
   async create(newStaff: CreateStaffDto, createdUser: User) {
-    const { name, position, featuredImage } = newStaff;
+    const { name, position, featuredImage, description } = newStaff;
 
     const staff = this.repo.create({
       name,
       position,
       featuredImage: await toWebp(featuredImage),
+      description,
       createdBy: createdUser,
     });
 

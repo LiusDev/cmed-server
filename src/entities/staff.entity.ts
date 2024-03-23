@@ -25,6 +25,9 @@ export class Staff {
   @Column()
   name: string;
 
+  @Column("text")
+  description: string;
+
   @Column()
   position: string;
 

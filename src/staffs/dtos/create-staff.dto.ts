@@ -11,6 +11,10 @@ export class CreateStaffDto {
   name: string;
 
   @IsString()
+  @IsNotEmpty()
+  description: string
+
+  @IsString()
   @MaxLength(255)
   @IsNotEmpty()
   position: string;

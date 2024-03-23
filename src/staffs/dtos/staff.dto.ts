@@ -17,5 +17,8 @@ export class StaffDto {
   name: string;
 
   @Expose()
+  description: string;
+
+  @Expose()
   position: string;
 }

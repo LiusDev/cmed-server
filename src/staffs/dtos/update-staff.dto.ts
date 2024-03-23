@@ -11,6 +11,9 @@ export class UpdateStaffDto {
   name: string;
 
   @IsString()
+  description: string;
+
+  @IsString()
   @MaxLength(255)
   @IsNotEmpty()
   position: string;
