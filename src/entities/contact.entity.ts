@@ -30,7 +30,7 @@ export class Contact {
   company: string;
 
   @Column()
-  isPersonal: boolean;
+  customerType: string;
 
   @Column()
   content: string;

@@ -8,7 +8,7 @@ import { CreateContactDto } from './dto/create-contact.dto';
 export class ContactsService {
   constructor(
     @InjectRepository(Contact) private readonly repo: Repository<Contact>,
-  ) {}
+  ) { }
 
   async getContacts({
     name,
@@ -52,7 +52,9 @@ export class ContactsService {
   }
 
   async createContact(contact: CreateContactDto): Promise<Contact> {
-    const newContact = this.repo.create(contact);
+    const { name, company, phone, email, customerType, content } = contact
+    const newContact = this.repo.create()
+    Object.assign(newContact, { name, company, phone, email, customerType, content })
     return await this.repo.save(newContact);
   }
 }

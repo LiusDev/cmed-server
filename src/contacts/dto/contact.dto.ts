@@ -23,7 +23,7 @@ export class ContactDto {
   company: string;
 
   @Expose()
-  isPersonal: boolean;
+  customerType: string;
 
   @Expose()
   content: string;

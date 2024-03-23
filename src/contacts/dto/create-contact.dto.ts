@@ -30,7 +30,8 @@ export class CreateContactDto {
   @IsNotEmpty()
   content: string;
 
-  @IsBoolean()
+
+  @IsString()
   @IsNotEmpty()
-  isPersonal: boolean;
+  customerType: boolean;
 }
