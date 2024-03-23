@@ -76,7 +76,11 @@ export class CategoriesController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: number, @Res() res: Response) {
-    await this.categoriesService.delete(id);
-    res.status(HttpStatus.NO_CONTENT).send();
+    if(await this.categoriesService.delete(id)) {
+      res.status(HttpStatus.NO_CONTENT).send();
+    }
+    else {
+      res.status(HttpStatus.UNPROCESSABLE_ENTITY).send();
+    }
   }
 }

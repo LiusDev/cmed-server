@@ -89,12 +89,13 @@ export class CategoriesService {
     return await this.repo.save(item);
   }
 
-  async delete(id: number): Promise<Category> {
-    const item = await this.repo.findOneBy({ id });
+  async delete(id: number): Promise<boolean> {
+    const item = await this.repo.findOne({where: {id}, relations: ["news"]});
     if (!item) {
       throw new NotFoundException('Category not found');
     }
-
-    return await this.repo.remove(item);
+    if(item.news != null && item.news.length != 0) return false;
+    await this.repo.remove(item);
+    return true;
   }
 }
