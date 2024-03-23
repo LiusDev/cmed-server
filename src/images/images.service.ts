@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UploadApiResponse, v2 as cloudinary } from 'cloudinary';
+import sharp from 'sharp';
 import { Readable } from 'stream';
 
 @Injectable()
@@ -15,8 +16,7 @@ export class ImagesService {
 
   async uploadBase64Image(folder: string, image: string): Promise<string> {
     const base64Data = image.split(',')[1];
-    const imageBuffer = Buffer.from(base64Data, 'base64');
-
+    const imageBuffer = await sharp(Buffer.from(base64Data, 'base64')).webp().toBuffer();
     return new Promise((res, rej) => {
       const theTransformStream = cloudinary.uploader.upload_stream(
         {

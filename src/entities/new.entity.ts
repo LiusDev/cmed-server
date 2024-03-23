@@ -20,7 +20,7 @@ export class New {
   @UpdateDateColumn()
   modifiedAt: Date;
 
-  @Column()
+  @Column("text")
   title: string;
 
   @Column()
