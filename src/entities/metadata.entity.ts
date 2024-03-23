@@ -16,4 +16,11 @@ export class Metadata {
 
   @Column({ default: '' })
   companyAddress: string;
+
+  @Column("text")
+  ceoImage: string;
+
+  @Column("text")
+  quoteImage: string;
+
 }

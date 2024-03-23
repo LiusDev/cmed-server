@@ -16,4 +16,10 @@ export class UpsertMetadataDto {
   @IsString()
   @IsNotEmpty()
   companyAddress: string;
+
+  @IsString()
+  ceoImage: string;
+
+  @IsString()
+  quoteImage: string;
 }
