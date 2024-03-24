@@ -31,10 +31,6 @@ export class StaffsService {
     const validPage = parseInt(page) || 1;
     const validPerPage = parseInt(perPage) || 10;
     return await this.repo.find({
-      relations: {
-        createdBy: true,
-        modifiedBy: true,
-      },
       where: {
         name: Like(`%${name || ''}%`),
         position: Like(`%${position || ''}%`),

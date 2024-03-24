@@ -18,10 +18,13 @@ import { CreateStaffDto } from './dtos/create-staff.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/entities/user.entity';
 import { Response, query } from 'express';
+import { StaffDto } from './dtos/staff.dto';
+import { Serialize } from '../interceptors/serialize.interceptor';
 
 @Controller('staffs')
+@Serialize(StaffDto)
 export class StaffsController {
-  constructor(private readonly staffsService: StaffsService) {}
+  constructor(private readonly staffsService: StaffsService) { }
 
   @Get()
   async findAll(
