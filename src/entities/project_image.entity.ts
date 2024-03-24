@@ -2,24 +2,20 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import { Project } from './project.entity';
 
 @Entity()
-export class Banner {
+export class ProjectImage {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@CreateDateColumn()
-	createdAt: Date;
-
-	@UpdateDateColumn()
-	modifiedAt: Date;
-
-	@Column()
-	name: string;
-
 	@Column("longblob")
 	image: string;
+
+	@ManyToOne(() => Project, (project) => project.images)
+	project: Project
 }

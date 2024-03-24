@@ -22,7 +22,7 @@ export class Partner {
   @Column()
   name: string;
 
-  @Column()
+  @Column("longblob")
   image: string;
 
   @ManyToOne(() => User, (user) => user.createdPartners)

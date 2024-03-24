@@ -17,7 +17,7 @@ export class Metadata {
   @Column({ default: '' })
   companyAddress: string;
 
-  @Column("text")
+  @Column("longblob")
   ceoImage: string;
 
   @Column("text")

@@ -11,7 +11,7 @@ export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private readonly repo: Repository<Project>,
-  ) {}
+  ) { }
 
   async findAll({
     name,
@@ -81,6 +81,7 @@ export class ProjectsService {
       description,
       featuredImage,
       content,
+      images,
       createdBy: createdUser,
     });
 

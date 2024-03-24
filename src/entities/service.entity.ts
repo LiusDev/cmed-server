@@ -25,7 +25,7 @@ export class Service {
   @Column()
   description: string;
 
-  @Column()
+  @Column("longblob")
   featuredImage: string;
 
   @Column()
