@@ -1,8 +1,11 @@
 ---
 deployment:
+  environment:
+    VENV_ACTIVATION_PATH: $VENV_ACTIVATION_PATH
+    DEPLOYPATH: $DEPLOYPATH
   tasks:
-    - source /home/cme26486/nodevenv/app/cmed-server/16/bin/activate
-    - export DEPLOYPATH=/home/cme26486/app/cmed-server
-    - node run build
-    - /bin/rm -rf $DEPLOYPATH/dist
-    - /bin/cp dist $DEPLOYPATH
+    - source $VENV_ACTIVATION_PATH && npm run build
+    - if [ -d $DEPLOYPATH/dist ]; then rm -rf $DEPLOYPATH/dist; fi
+    - if [ -f $DEPLOYPATH/package.json ]; then rm $DEPLOYPATH/package.json; fi
+    - cp -r dist $DEPLOYPATH
+    - cp package.json $DEPLOYPATH
