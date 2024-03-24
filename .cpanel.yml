@@ -7,5 +7,8 @@ deployment:
     - source $VENV_ACTIVATION_PATH && npm run build
     - if [ -d $DEPLOYPATH/dist ]; then rm -rf $DEPLOYPATH/dist; fi
     - if [ -f $DEPLOYPATH/package.json ]; then rm $DEPLOYPATH/package.json; fi
+    - npm i && npm run build
     - cp -r dist $DEPLOYPATH
     - cp package.json $DEPLOYPATH
+    - rm -rf dist
+    - rm -rf node_modules
