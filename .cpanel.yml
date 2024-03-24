@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - source /home/cme26486/nodevenv/app/cmed-server/16/bin/activate
+    - export DEPLOYPATH=/home/cme26486/app/cmed-server
+    - node run build
+    - /bin/rm -rf $DEPLOYPATH/dist
+    - /bin/cp dist $DEPLOYPATH
