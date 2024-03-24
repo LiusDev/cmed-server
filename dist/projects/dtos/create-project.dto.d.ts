@@ -1,6 +1,0 @@
-export declare class CreateProjectDto {
-    name: string;
-    description: string;
-    featuredImage: string;
-    content: string;
-}
