@@ -6,6 +6,7 @@ import { CreatePartnerDto } from './dtos/create-partner.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdatePartnerDto } from './dtos/update-partner.dto';
 import { ImagesService } from 'src/images/images.service';
+import { toWebp } from '../utils';
 
 @Injectable()
 export class PartnersService {
@@ -13,7 +14,7 @@ export class PartnersService {
     @InjectRepository(Partner)
     private readonly repo: Repository<Partner>,
     private readonly imagesService: ImagesService,
-  ) {}
+  ) { }
 
   async findAll({
     name,
@@ -62,7 +63,7 @@ export class PartnersService {
 
     const newPartner = this.repo.create({
       name,
-      image,
+      image: await toWebp(image),
       createdBy: createdUser,
     });
     return await this.repo.save(newPartner);
@@ -79,6 +80,9 @@ export class PartnersService {
     }
 
     Object.assign(partnerToUpdate, partner);
+    if (partner.image) {
+      partnerToUpdate.image = await toWebp(partner.image)
+    }
     partnerToUpdate.modifiedBy = modifiedUser;
 
     return await this.repo.save(partnerToUpdate);

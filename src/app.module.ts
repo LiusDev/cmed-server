@@ -29,6 +29,10 @@ import { MetadataModule } from './metadata/metadata.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { RecruitmentModule } from './recruitment/recruitment.module';
 import { Recruitment } from './entities/recruitment.entity';
+import { Slider } from './entities/slider.entity';
+import { SlidersModule } from './slider/slider.module';
+import { Banner } from './entities/banner.entity';
+import { BannersModule } from './banner/slider/banner.module';
 
 @Module({
   imports: [
@@ -48,6 +52,8 @@ import { Recruitment } from './entities/recruitment.entity';
         Staff,
         User,
         Recruitment,
+        Slider,
+        Banner
       ],
       synchronize: true,
     }),
@@ -66,8 +72,10 @@ import { Recruitment } from './entities/recruitment.entity';
     MetadataModule,
     ContactsModule,
     RecruitmentModule,
+    SlidersModule,
+    BannersModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
