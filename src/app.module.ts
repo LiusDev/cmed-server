@@ -33,12 +33,17 @@ import { Slider } from './entities/slider.entity';
 import { SlidersModule } from './slider/slider.module';
 import { Banner } from './entities/banner.entity';
 import { BannersModule } from './banner/slider/banner.module';
+import { ProjectImage } from './entities/project_image.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT) ?? 3306,
+      password: process.env.DB_PASSWORD,
+      username: process.env.DB_USERNAME,
+      database: process.env.DB_DATABASE,
       entities: [
         Category,
         Contact,
@@ -48,6 +53,7 @@ import { BannersModule } from './banner/slider/banner.module';
         New,
         Partner,
         Project,
+        ProjectImage,
         Service,
         Staff,
         User,
