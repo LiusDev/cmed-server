@@ -7,7 +7,7 @@ import { UpdateNewDto } from './dtos/update-new.dto';
 import { CategoriesService } from 'src/categories/categories.service';
 import { User } from 'src/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class NewsService {
@@ -99,7 +99,7 @@ export class NewsService {
     const item = this.repo.create({
       title,
       description,
-      featuredImage: await toWebp(featuredImage),
+      featuredImage: await toWebpString(featuredImage),
       content,
       category,
       createdBy: createdUser,
@@ -132,7 +132,7 @@ export class NewsService {
     Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
     if(featuredImage) {
-      item.featuredImage = await toWebp(featuredImage);
+      item.featuredImage = await toWebpString(featuredImage);
     }
     return this.repo.save(item);
   }

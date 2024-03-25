@@ -6,7 +6,7 @@ import { UpdateNewDto } from './dtos/update-slider.dto';
 import { User } from 'src/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import { Slider } from '../entities/slider.entity';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class SlidersService {
@@ -80,7 +80,7 @@ export class SlidersService {
     const item = this.repo.create({
       title,
       description,
-      image: await toWebp(image),
+      image: await toWebpString(image),
     });
 
     return await this.repo.save(item);
@@ -101,7 +101,7 @@ export class SlidersService {
 
     Object.assign(item, rest);
     if (image) {
-      item.image = await toWebp(image);
+      item.image = await toWebpString(image);
     }
     return this.repo.save(item);
   }

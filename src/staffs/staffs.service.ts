@@ -5,7 +5,7 @@ import { Like, Repository } from 'typeorm';
 import { CreateStaffDto } from './dtos/create-staff.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateStaffDto } from './dtos/update-staff.dto';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class StaffsService {
@@ -59,7 +59,7 @@ export class StaffsService {
     const staff = this.repo.create({
       name,
       position,
-      featuredImage: await toWebp(featuredImage),
+      featuredImage: await toWebpString(featuredImage),
       description,
       createdBy: createdUser,
     });
@@ -80,7 +80,7 @@ export class StaffsService {
     Object.assign(staff, updateStaff);
     staff.modifiedBy = modifiedUser;
     if (updateStaff.featuredImage) {
-      staff.featuredImage = await toWebp(updateStaff.featuredImage)
+      staff.featuredImage = await toWebpString(updateStaff.featuredImage)
     }
 
     return await this.repo.save(staff);

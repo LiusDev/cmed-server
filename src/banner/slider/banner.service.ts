@@ -6,7 +6,7 @@ import { UpdateNewDto } from './dtos/update-banner.dto';
 import { User } from 'src/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import { Banner } from '../../entities/banner.entity';
-import { toWebp } from '../../utils';
+import { toWebpString } from '../../utils';
 
 @Injectable()
 export class BannersService {
@@ -68,7 +68,7 @@ export class BannersService {
 
     const item = this.repo.create({
       name,
-      image: await toWebp(image),
+      image: await toWebpString(image),
     });
     return await this.repo.save(item);
   }
@@ -87,7 +87,7 @@ export class BannersService {
 
     Object.assign(item, rest);
     if (image) {
-      item.image = await toWebp(image);
+      item.image = await toWebpString(image);
     }
     return this.repo.save(item);
   }

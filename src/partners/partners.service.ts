@@ -6,7 +6,7 @@ import { CreatePartnerDto } from './dtos/create-partner.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdatePartnerDto } from './dtos/update-partner.dto';
 import { ImagesService } from 'src/images/images.service';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class PartnersService {
@@ -63,7 +63,7 @@ export class PartnersService {
 
     const newPartner = this.repo.create({
       name,
-      image: await toWebp(image),
+      image: await toWebpString(image),
       createdBy: createdUser,
     });
     return await this.repo.save(newPartner);
@@ -81,7 +81,7 @@ export class PartnersService {
 
     Object.assign(partnerToUpdate, partner);
     if (partner.image) {
-      partnerToUpdate.image = await toWebp(partner.image)
+      partnerToUpdate.image = await toWebpString(partner.image)
     }
     partnerToUpdate.modifiedBy = modifiedUser;
 

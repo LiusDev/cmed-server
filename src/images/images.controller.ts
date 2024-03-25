@@ -13,7 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UploadImageDto } from './dtos/upload-image.dto';
 import { DeleteImageDto } from './dtos/delete-image.dto';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Controller('images')
 @UseGuards(JwtAuthGuard)
@@ -27,7 +27,7 @@ export class ImagesController {
   ) {
     const result = await this.imagesService.uploadBase64Image(
       folder,
-      await toWebp(body.file),
+      await toWebpString(body.file),
     );
     console.log(result);
   }

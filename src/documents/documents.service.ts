@@ -9,7 +9,7 @@ import { UpdateDocumentDto } from './dtos/update-document.dto';
 import { join } from 'path';
 import { promises as fs } from 'fs';
 import { ConfigService } from '@nestjs/config';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class DocumentsService {
@@ -114,7 +114,7 @@ export class DocumentsService {
       name,
       description,
       document: fileUrl,
-      featuredImage: await toWebp(newItem.featuredImage),
+      featuredImage: await toWebpString(newItem.featuredImage),
       category,
       createdBy: createdUser,
     });
@@ -165,7 +165,7 @@ export class DocumentsService {
 
     Object.assign(item, rest);
     if (updateItem.featuredImage) {
-      item.featuredImage = await toWebp(updateItem.featuredImage)
+      item.featuredImage = await toWebpString(updateItem.featuredImage)
     }
     item.modifiedBy = modifiedUser;
 

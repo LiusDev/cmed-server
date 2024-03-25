@@ -6,7 +6,7 @@ import { CreateCustomerDto } from './dtos/create-customer.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateCustomerDto } from './dtos/update-customer.dto';
 import { ImagesService } from 'src/images/images.service';
-import { toWebp } from '../utils';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class CustomersService {
@@ -68,9 +68,9 @@ export class CustomersService {
 
     const newCustomer = this.repo.create({
       name,
-      image: await toWebp(image),
-      logo: await toWebp(logo),
-      icon: await toWebp(icon),
+      image: await toWebpString(image),
+      logo: await toWebpString(logo),
+      icon: await toWebpString(icon),
       description,
       createdBy: createdUser,
     });
@@ -89,15 +89,15 @@ export class CustomersService {
 
     Object.assign(customerToUpdate, customer);
     if (customer.image) {
-      customerToUpdate.image = await toWebp(customer.image)
+      customerToUpdate.image = await toWebpString(customer.image)
     }
 
     if (customer.logo) {
-      customerToUpdate.logo = await toWebp(customer.logo)
+      customerToUpdate.logo = await toWebpString(customer.logo)
     }
 
     if (customer.icon) {
-      customerToUpdate.icon = await toWebp(customer.icon)
+      customerToUpdate.icon = await toWebpString(customer.icon)
     }
 
     customerToUpdate.modifiedBy = modifiedUser;
