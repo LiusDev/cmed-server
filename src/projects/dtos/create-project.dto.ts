@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -14,6 +14,9 @@ export class CreateProjectDto {
   @IsString()
   @IsNotEmpty()
   featuredImage: string;
+
+  @IsArray()
+  images: string[]
 
   @IsString()
   @IsNotEmpty()

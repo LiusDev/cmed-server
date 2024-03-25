@@ -34,9 +34,6 @@ export class Project {
   content: string;
 
   @OneToMany(() => ProjectImage, (pi) => pi.project)
-  @Column({
-    default: []
-  })
   images: ProjectImage[]
 
   @ManyToOne(() => User, (user) => user.createdProjects)

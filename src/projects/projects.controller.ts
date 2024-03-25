@@ -40,7 +40,7 @@ export class ProjectsController {
     },
   ) {
     const d = await this.projectsService.findAll(query)
-    return d.map(i => ({ ...i, images: i.images.map(y => y.image) }));
+    return d.map(i => ({ ...i, images: i.images?.map(y => y.image) ?? [] }));
   }
 
   @Get('count')

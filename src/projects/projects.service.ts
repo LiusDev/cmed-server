@@ -5,6 +5,7 @@ import { Like, Repository } from 'typeorm';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateProjectDto } from './dtos/update-project.dto';
+import { ProjectImage } from '../entities/project_image.entity';
 
 @Injectable()
 export class ProjectsService {
@@ -33,8 +34,7 @@ export class ProjectsService {
 
     return await this.repo.find({
       relations: {
-        createdBy: true,
-        modifiedBy: true,
+        images: true
       },
       where: {
         name: Like(`%${name || ''}%`),
@@ -74,14 +74,14 @@ export class ProjectsService {
   }
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
-    const { name, description, featuredImage, content } = newItem;
+    const { name, description, featuredImage, content, images } = newItem;
 
     const item = this.repo.create({
       name,
       description,
       featuredImage,
       content,
-      images,
+      images: images?.map(i => ({ image: i } as ProjectImage)) ?? [],
       createdBy: createdUser,
     });
 
