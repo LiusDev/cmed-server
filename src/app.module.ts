@@ -38,7 +38,7 @@ import { ProjectImage } from './entities/project_image.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: process.env.DB_TYPE as "mysql" | "mariadb" | "sqlite",
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT) ?? 3306,
       password: process.env.DB_PASSWORD,
