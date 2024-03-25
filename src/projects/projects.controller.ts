@@ -21,6 +21,8 @@ import { User } from 'src/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { Response } from 'express';
+import * as sharp from "sharp";
+
 
 @Controller('projects')
 @Serialize(ProjectDto)
@@ -56,7 +58,11 @@ export class ProjectsController {
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return await this.projectsService.findOne(id);
+    const data = await this.projectsService.findOne(id)
+    const tasks = data.images?.map(async (i) => "data:image/webp;base64," + (await sharp(i.image).webp().toBuffer()).toString("base64"))
+    const images = (await Promise.all(tasks))
+    const n = { ...data, images: images }
+    return n
   }
 
   @Post()

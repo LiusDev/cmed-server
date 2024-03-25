@@ -1,4 +1,4 @@
-import { IsBase64, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateServiceDto {
   @IsString()
@@ -14,6 +14,10 @@ export class CreateServiceDto {
   @IsString()
   @IsNotEmpty()
   featuredImage: string;
+
+  @IsString()
+  @IsNotEmpty()
+  featuredImage2: string;
 
   @IsString()
   @IsNotEmpty()

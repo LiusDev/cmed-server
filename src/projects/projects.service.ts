@@ -6,12 +6,16 @@ import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { ProjectImage } from '../entities/project_image.entity';
+import { toWebp, toWebpString } from '../utils';
+import sharp from 'sharp';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private readonly repo: Repository<Project>,
+    @InjectRepository(ProjectImage)
+    private readonly childRepo: Repository<ProjectImage>
   ) { }
 
   async findAll({
@@ -66,8 +70,7 @@ export class ProjectsService {
   async findOne(id: number): Promise<Project> {
     return await this.repo.findOne({
       relations: {
-        createdBy: true,
-        modifiedBy: true,
+        images: true
       },
       where: { id },
     });
@@ -75,13 +78,13 @@ export class ProjectsService {
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
     const { name, description, featuredImage, content, images } = newItem;
-
+    const webpImages = await Promise.all(images?.map(async (i) => ({ image: await toWebp(i) } as ProjectImage))) ?? []
     const item = this.repo.create({
       name,
       description,
-      featuredImage,
+      featuredImage: await toWebpString(featuredImage),
       content,
-      images: images?.map(i => ({ image: i } as ProjectImage)) ?? [],
+      images: webpImages,
       createdBy: createdUser,
     });
 
@@ -99,16 +102,17 @@ export class ProjectsService {
     }
 
     Object.assign(item, updateItem);
+    item.featuredImage = await toWebpString(item.featuredImage)
+    this.childRepo.remove(item.images)
+    item.images = (await Promise.all(updateItem.images.map(toWebp))).map(i => ({
+      image: i
+    }) as ProjectImage)
     item.modifiedBy = modifiedUser;
 
     return await this.repo.save(item);
   }
 
   async remove(id: number): Promise<void> {
-    const item = await this.repo.findOneBy({ id });
-    if (!item) {
-      throw new NotFoundException('Project not found');
-    }
-    await this.repo.remove(item);
+    await this.repo.delete(id)
   }
 }

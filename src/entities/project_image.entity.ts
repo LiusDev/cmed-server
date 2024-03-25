@@ -14,7 +14,7 @@ export class ProjectImage {
 	id: number;
 
 	@Column("longblob")
-	image: string;
+	image: Buffer;
 
 	@ManyToOne(() => Project, (project) => project.images)
 	project: Project

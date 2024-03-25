@@ -17,5 +17,9 @@ export class UpdateServiceDto {
 
   @IsString()
   @IsNotEmpty()
+  featuredImage2: string;
+
+  @IsString()
+  @IsNotEmpty()
   content: string;
 }

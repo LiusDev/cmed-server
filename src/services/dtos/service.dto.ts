@@ -18,6 +18,8 @@ export class ServiceDto {
 
   @Expose()
   featuredImage: string;
+  @Expose()
+  featuredImage2: string;
 
   @Expose()
   content: string;

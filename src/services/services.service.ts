@@ -6,6 +6,7 @@ import { CreateServiceDto } from './dtos/create-service.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 import { ImagesService } from 'src/images/images.service';
+import { toWebpString } from '../utils';
 
 @Injectable()
 export class ServicesService {
@@ -13,7 +14,7 @@ export class ServicesService {
     @InjectRepository(Service)
     private readonly repo: Repository<Service>,
     private readonly imagesService: ImagesService,
-  ) {}
+  ) { }
 
   async findAll({
     name,
@@ -34,10 +35,6 @@ export class ServicesService {
     const validPerPage = parseInt(perPage) || 10;
 
     return await this.repo.find({
-      relations: {
-        createdBy: true,
-        modifiedBy: true,
-      },
       where: {
         name: Like(`%${name || ''}%`),
         description: Like(`%${description || ''}%`),
@@ -61,12 +58,13 @@ export class ServicesService {
   }
 
   async create(newItem: CreateServiceDto, createdUser: User): Promise<Service> {
-    const { name, description, featuredImage, content } = newItem;
+    const { name, description, featuredImage, featuredImage2, content } = newItem;
 
     const item = this.repo.create({
       name,
       description,
-      featuredImage,
+      featuredImage: await toWebpString(featuredImage),
+      featuredImage2: await toWebpString(featuredImage2),
       content,
       createdBy: createdUser,
     });
@@ -86,7 +84,12 @@ export class ServicesService {
 
     Object.assign(item, updateItem);
     item.modifiedBy = modifiedUser;
-
+    if (updateItem.featuredImage) {
+      item.featuredImage = await toWebpString(updateItem.featuredImage)
+    }
+    if (updateItem.featuredImage2) {
+      item.featuredImage2 = await toWebpString(updateItem.featuredImage2)
+    }
     return await this.repo.save(item);
   }
 

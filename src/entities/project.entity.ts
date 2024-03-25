@@ -33,7 +33,7 @@ export class Project {
   @Column()
   content: string;
 
-  @OneToMany(() => ProjectImage, (pi) => pi.project)
+  @OneToMany(() => ProjectImage, (pi) => pi.project, { cascade: ["insert", "update", "remove"] })
   images: ProjectImage[]
 
   @ManyToOne(() => User, (user) => user.createdProjects)

@@ -28,6 +28,9 @@ export class Service {
   @Column("longblob")
   featuredImage: string;
 
+  @Column("longblob")
+  featuredImage2: string;
+
   @Column()
   content: string;
 

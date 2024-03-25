@@ -20,7 +20,7 @@ export class ProjectDto {
   featuredImage: string;
 
   @Expose()
-  images: string
+  images: string[]
 
   @Expose()
   content: string;
