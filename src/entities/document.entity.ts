@@ -20,7 +20,7 @@ export class Document {
   @UpdateDateColumn()
   modifiedAt: Date;
 
-  @Column("longblob")
+  @Column("longtext")
   featuredImage: string;
 
   logo: string;
