@@ -68,7 +68,7 @@ export class BannersService {
 
     const item = this.repo.create({
       name,
-      image: await toWebpString(image),
+      image: (await this.imagesService.uploadBase64Image("images", image)).secure_url,
     });
     return await this.repo.save(item);
   }
@@ -86,8 +86,9 @@ export class BannersService {
     const { image, ...rest } = updateNew;
 
     Object.assign(item, rest);
-    if (image) {
-      item.image = await toWebpString(image);
+    if (image && image.localeCompare(item.image) != 0) {
+      await this.imagesService.deleteImage(item.image);
+      item.image = (await this.imagesService.uploadBase64Image("images", image)).secure_url;
     }
     return this.repo.save(item);
   }
@@ -99,5 +100,6 @@ export class BannersService {
     }
 
     await this.repo.remove(item);
+    await this.imagesService.deleteImage(item.image);
   }
 }

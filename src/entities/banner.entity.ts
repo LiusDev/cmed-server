@@ -20,6 +20,6 @@ export class Banner {
 	@Column()
 	name: string;
 
-	@Column("longblob")
+	@Column("longtext")
 	image: string;
 }
