@@ -26,7 +26,7 @@ export class Slider {
 	@Column()
 	description: string;
 
-	@Column("longblob")
+	@Column("longtext")
 	image: string;
 
 	@Column()

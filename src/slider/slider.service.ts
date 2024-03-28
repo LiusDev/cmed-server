@@ -6,7 +6,6 @@ import { UpdateNewDto } from './dtos/update-slider.dto';
 import { User } from 'src/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import { Slider } from '../entities/slider.entity';
-import { toWebpString } from '../utils';
 
 @Injectable()
 export class SlidersService {
@@ -74,13 +73,12 @@ export class SlidersService {
   }
 
   async create(newItem: CreateNewDto, createdUser: User): Promise<Slider> {
-    const { title, description, image } = newItem;
+    const { image, ...rest } = newItem;
 
 
     const item = this.repo.create({
-      title,
-      description,
-      image: await toWebpString(image),
+      ...rest,
+      image: (await this.imagesService.uploadBase64Image("images", image)).secure_url,
     });
 
     return await this.repo.save(item);
@@ -98,10 +96,10 @@ export class SlidersService {
 
     const { image, ...rest } = updateNew;
 
-
     Object.assign(item, rest);
-    if (image) {
-      item.image = await toWebpString(image);
+    if (image && image.localeCompare(item.image) !== 0) {
+      await this.imagesService.deleteImage(item.image)
+      item.image = (await this.imagesService.uploadBase64Image("images", image)).secure_url;
     }
     return this.repo.save(item);
   }
@@ -111,7 +109,7 @@ export class SlidersService {
     if (!item) {
       throw new NotFoundException('Not found');
     }
-
+    await this.imagesService.deleteImage(item.image);
     await this.repo.remove(item);
   }
 }
