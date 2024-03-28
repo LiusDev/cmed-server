@@ -34,6 +34,10 @@ import { SlidersModule } from './slider/slider.module';
 import { Banner } from './entities/banner.entity';
 import { BannersModule } from './banner/slider/banner.module';
 import { ProjectImage } from './entities/project_image.entity';
+import { Setting } from './entities/Setting.entity';
+import { SettingService } from './setting/setting.service';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -45,6 +49,7 @@ import { ProjectImage } from './entities/project_image.entity';
       username: process.env.DB_USERNAME,
       database: process.env.DB_DATABASE,
       entities: [
+        Setting,
         Category,
         Contact,
         Customer,
@@ -59,7 +64,7 @@ import { ProjectImage } from './entities/project_image.entity';
         User,
         Recruitment,
         Slider,
-        Banner
+        Banner,
       ],
       synchronize: true,
     }),
@@ -79,7 +84,8 @@ import { ProjectImage } from './entities/project_image.entity';
     ContactsModule,
     RecruitmentModule,
     SlidersModule,
-    BannersModule
+    BannersModule,
+    CloudinaryModule
   ],
   controllers: [AppController],
   providers: [AppService],
