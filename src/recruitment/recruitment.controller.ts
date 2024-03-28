@@ -25,7 +25,7 @@ import { Response } from 'express';
 @Controller('recruitment')
 @Serialize(RecruitmentDto)
 export class RecruitmentController {
-  constructor(private readonly recruitmentService: RecruitmentService) {}
+  constructor(private readonly recruitmentService: RecruitmentService) { }
 
   @Get()
   async findAll(
@@ -52,7 +52,7 @@ export class RecruitmentController {
   }
 
   @Get(':id')
-  async findOne(id: number) {
+  async findOne(@Param("id") id: number) {
     return await this.recruitmentService.findOne(id);
   }
 

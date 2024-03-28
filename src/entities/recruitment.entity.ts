@@ -25,7 +25,7 @@ export class Recruitment {
   @Column()
   deadline: Date;
 
-  @Column()
+  @Column("longtext")
   content: string;
 
   @ManyToOne(() => User, (user) => user.createdRecruitments)
