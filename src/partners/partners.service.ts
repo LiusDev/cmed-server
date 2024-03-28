@@ -63,7 +63,7 @@ export class PartnersService {
 
     const newPartner = this.repo.create({
       name,
-      image: await toWebpString(image),
+      image: (await this.imagesService.uploadBase64Image("images", image)).secure_url,
       createdBy: createdUser,
     });
     return await this.repo.save(newPartner);
@@ -78,10 +78,11 @@ export class PartnersService {
     if (!partnerToUpdate) {
       throw new NotFoundException('Partner not found');
     }
-
-    Object.assign(partnerToUpdate, partner);
-    if (partner.image) {
-      partnerToUpdate.image = await toWebpString(partner.image)
+    const { image, ...rest } = partner;
+    Object.assign(partnerToUpdate, rest);
+    if (image && image.localeCompare(partnerToUpdate.image) !== 0) {
+      await this.imagesService.deleteImage(partnerToUpdate.image)
+      partnerToUpdate.image = (await this.imagesService.uploadBase64Image("images", partner.image)).secure_url
     }
     partnerToUpdate.modifiedBy = modifiedUser;
 
@@ -93,7 +94,7 @@ export class PartnersService {
     if (!partnerToDelete) {
       throw new NotFoundException('Partner not found');
     }
-
     await this.repo.remove(partnerToDelete);
+    await this.imagesService.deleteImage(partnerToDelete.image);
   }
 }
