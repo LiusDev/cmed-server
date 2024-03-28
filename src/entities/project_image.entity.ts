@@ -13,8 +13,8 @@ export class ProjectImage {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column("longblob")
-	image: Buffer;
+	@Column("longtext")
+	image: string;
 
 	@ManyToOne(() => Project, (project) => project.images)
 	project: Project

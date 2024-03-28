@@ -6,8 +6,9 @@ import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { ProjectImage } from '../entities/project_image.entity';
-import { toWebp, toWebpString } from '../utils';
+import { areArraysDifferent, toWebp, toWebpString } from '../utils';
 import sharp from 'sharp';
+import { ImagesService } from '../images/images.service';
 
 @Injectable()
 export class ProjectsService {
@@ -15,7 +16,8 @@ export class ProjectsService {
     @InjectRepository(Project)
     private readonly repo: Repository<Project>,
     @InjectRepository(ProjectImage)
-    private readonly childRepo: Repository<ProjectImage>
+    private readonly childRepo: Repository<ProjectImage>,
+    private readonly imagesService: ImagesService,
   ) { }
 
   async findAll({
@@ -78,16 +80,15 @@ export class ProjectsService {
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
     const { name, description, featuredImage, content, images } = newItem;
-    const webpImages = await Promise.all(images?.map(async (i) => ({ image: await toWebp(i) } as ProjectImage))) ?? []
+    const webpImages = await Promise.all(images?.map(i => this.imagesService.uploadBase64Image("images", i)) ?? [])
     const item = this.repo.create({
       name,
       description,
-      featuredImage: await toWebpString(featuredImage),
+      featuredImage: (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url,
       content,
-      images: webpImages,
+      images: webpImages.map(i => this.childRepo.create({ image: i.secure_url })),
       createdBy: createdUser,
     });
-
     return await this.repo.save(item);
   }
 
@@ -100,19 +101,48 @@ export class ProjectsService {
     if (!item) {
       throw new NotFoundException('Project not found');
     }
+    const { images, featuredImage, ...rest } = updateItem
+    Object.assign(item, rest);
+    if (featuredImage && featuredImage.localeCompare(item.featuredImage) !== 0) {
+      await this.imagesService.deleteImage(item.featuredImage)
+      item.featuredImage = (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url
+    }
 
-    Object.assign(item, updateItem);
-    item.featuredImage = await toWebpString(item.featuredImage)
-    this.childRepo.remove(item.images)
-    item.images = (await Promise.all(updateItem.images.map(toWebp))).map(i => ({
-      image: i
-    }) as ProjectImage)
+    let check = false
+
+    if (item.images && images.length != 0) check = areArraysDifferent(item.images.map(i => i.image), images)
+    else if (item.images == null && images.length != 0)
+      item.images = []
+
+    if (check) {
+      const imagesToDelete = item.images.filter(i => !images.includes(i.image))
+      imagesToDelete.forEach(i => item.images.splice(item.images.indexOf(i), 1))
+      await this.imagesService.deleteImage(...imagesToDelete.map(i => i.image))
+      const newImages = images.filter(i => i.startsWith("data:image"))
+      const webpImages = await Promise.all(newImages.map(i => this.imagesService.uploadBase64Image("images", i).then(i => i.secure_url)))
+      item.images.push(...webpImages.map(i => this.childRepo.create({ image: i })))
+    }
     item.modifiedBy = modifiedUser;
-
     return await this.repo.save(item);
   }
 
   async remove(id: number): Promise<void> {
-    await this.repo.delete(id)
+    try {
+      const project = await this.repo.findOne({
+        relations: {
+          images: true
+        },
+        where: { id }
+      });
+
+      if (!project) {
+        throw new NotFoundException('Project not found');
+      }
+
+      await this.imagesService.deleteImage(...project.images.map(i => i.image, project.featuredImage));
+      await this.repo.delete(id);
+    } catch (error) {
+      throw new Error('Failed to remove project');
+    }
   }
 }
