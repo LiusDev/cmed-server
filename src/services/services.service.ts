@@ -47,6 +47,14 @@ export class ServicesService {
     });
   }
 
+  async findToHome() {
+    return await this.repo.find({
+      where: {
+        showInHome: true
+      }
+    })
+  }
+
   async findOne(id: number): Promise<Service> {
     return await this.repo.findOne({
       relations: {
@@ -59,12 +67,12 @@ export class ServicesService {
 
   async create(newItem: CreateServiceDto, createdUser: User): Promise<Service> {
     const { name, description, featuredImage, featuredImage2, content } = newItem;
-
+    const images = await Promise.all([featuredImage, featuredImage2].map(async (image) => this.imagesService.uploadBase64Image("images", image)))
     const item = this.repo.create({
       name,
       description,
-      featuredImage: await toWebpString(featuredImage),
-      featuredImage2: await toWebpString(featuredImage2),
+      featuredImage: images[0].secure_url,
+      featuredImage2: images[1].secure_url,
       content,
       createdBy: createdUser,
     });
@@ -81,14 +89,14 @@ export class ServicesService {
     if (!item) {
       throw new NotFoundException('Service not found');
     }
-
-    Object.assign(item, updateItem);
+    const { featuredImage, featuredImage2, ...rest } = updateItem;
+    Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
-    if (updateItem.featuredImage) {
-      item.featuredImage = await toWebpString(updateItem.featuredImage)
+    if (featuredImage) {
+      item.featuredImage = (await this.imagesService.uploadBase64Image("images", updateItem.featuredImage)).secure_url
     }
-    if (updateItem.featuredImage2) {
-      item.featuredImage2 = await toWebpString(updateItem.featuredImage2)
+    if (featuredImage2) {
+      item.featuredImage2 = (await this.imagesService.uploadBase64Image("images", updateItem.featuredImage2)).secure_url
     }
     return await this.repo.save(item);
   }
@@ -98,7 +106,7 @@ export class ServicesService {
     if (!item) {
       throw new NotFoundException('Service not found');
     }
-
+    await Promise.all([this.imagesService.deleteImage(item.featuredImage), this.imagesService.deleteImage(item.featuredImage2)])
     await this.repo.remove(item);
   }
 }

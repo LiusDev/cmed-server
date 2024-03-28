@@ -24,7 +24,7 @@ import { Response } from 'express';
 @Controller('services')
 @Serialize(ServiceDto)
 export class ServicesController {
-  constructor(private readonly servicesService: ServicesService) {}
+  constructor(private readonly servicesService: ServicesService) { }
 
   @Get()
   async findAll(
@@ -44,6 +44,12 @@ export class ServicesController {
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return await this.servicesService.findOne(id);
+  }
+
+  @Get("home")
+  async home() {
+    const data = await this.servicesService.findToHome()
+    return data
   }
 
   @Post()

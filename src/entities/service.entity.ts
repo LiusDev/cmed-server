@@ -25,11 +25,14 @@ export class Service {
   @Column()
   description: string;
 
-  @Column("longblob")
+  @Column("longtext")
   featuredImage: string;
 
-  @Column("longblob")
+  @Column("longtext")
   featuredImage2: string;
+
+  @Column({ default: false })
+  showInHome: boolean
 
   @Column()
   content: string;
