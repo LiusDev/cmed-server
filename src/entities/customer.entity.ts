@@ -25,13 +25,13 @@ export class Customer {
   @Column({ nullable: true })
   description: string;
 
-  @Column("longblob")
+  @Column("longtext")
   image: string;
 
-  @Column("longblob")
+  @Column("longtext")
   logo: string;
 
-  @Column("longblob")
+  @Column("longtext")
   icon: string
 
   @ManyToOne(() => User, (user) => user.createdCustomers)

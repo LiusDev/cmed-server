@@ -10,6 +10,8 @@ import { join } from 'path';
 import { promises as fs } from 'fs';
 import { ConfigService } from '@nestjs/config';
 import { toWebpString } from '../utils';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { ImagesService } from '../images/images.service';
 
 @Injectable()
 export class DocumentsService {
@@ -18,6 +20,8 @@ export class DocumentsService {
     private readonly repo: Repository<Document>,
     private readonly categoriesService: CategoriesService,
     private readonly configService: ConfigService,
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly imagesService: ImagesService
   ) { }
   async findAll({
     name,
@@ -102,19 +106,15 @@ export class DocumentsService {
       throw new NotFoundException('Category not found');
     }
 
-    const filePath = join(__dirname, '..', '..', 'uploads', file.originalname);
-
-    const apiUrl = this.configService.get('API_URL');
-
-    const fileUrl = `${apiUrl}/uploads/${file.originalname}`;
-
-    await fs.writeFile(filePath, file.buffer);
+    const [filePath, featuredImage] = await Promise.all([this.cloudinaryService.uploadFile(file, {
+      format: "pdf"
+    }).then(i => i.secure_url), this.imagesService.uploadBase64Image("images", newItem.featuredImage).then(i => i.secure_url)])
 
     const item = this.repo.create({
       name,
       description,
-      document: fileUrl,
-      featuredImage: await toWebpString(newItem.featuredImage),
+      document: filePath,
+      featuredImage,
       category,
       createdBy: createdUser,
     });
@@ -133,7 +133,7 @@ export class DocumentsService {
       throw new NotFoundException('Document not found');
     }
 
-    const { categoryId, ...rest } = updateItem;
+    const { categoryId, featuredImage, ...rest } = updateItem;
 
     if (categoryId) {
       const category = await this.categoriesService.findOne(categoryId);
@@ -143,28 +143,14 @@ export class DocumentsService {
       item.category = category;
     }
 
-    if (file) {
-      const url = new URL(item.document);
-      const fileName = url.pathname.split('/').pop();
-      const oldFilePath = join(__dirname, '..', '..', 'uploads', fileName);
-      await fs.unlink(oldFilePath);
-
-      const newFilePath = join(
-        __dirname,
-        '..',
-        '..',
-        'uploads',
-        file.originalname,
-      );
-      await fs.writeFile(newFilePath, file.buffer);
-
-      const apiUrl = this.configService.get('API_URL');
-      const fileUrl = `${apiUrl}/uploads/${file.originalname}`;
-      item.document = fileUrl;
+    if (file && file.buffer.byteLength > 0) {
+      await this.cloudinaryService.deleteFile(item.document)
+      item.document = (await this.cloudinaryService.uploadFile(file, { folder: "documents", public_id: Date.now() + "_" + file.originalname, format: "pdf" })).secure_url
     }
 
     Object.assign(item, rest);
-    if (updateItem.featuredImage) {
+    if (featuredImage && featuredImage.localeCompare(item.featuredImage) !== 0) {
+      await this.imagesService.deleteImage(item.featuredImage)
       item.featuredImage = await toWebpString(updateItem.featuredImage)
     }
     item.modifiedBy = modifiedUser;
@@ -178,10 +164,8 @@ export class DocumentsService {
       throw new NotFoundException('Document not found');
     }
 
-    const url = new URL(item.document);
-    const fileName = url.pathname.split('/').pop();
-    const filePath = join(__dirname, '..', '..', 'uploads', fileName);
-    await fs.unlink(filePath);
+    await this.imagesService.deleteImage(item.featuredImage);
+    await this.cloudinaryService.deleteFile(item.document);
 
     await this.repo.remove(item);
   }
