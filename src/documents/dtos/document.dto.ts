@@ -27,5 +27,11 @@ export class DocumentDto {
   view: number;
 
   @Expose()
+  download: number;
+
+  @Expose()
+  pages: number;
+
+  @Expose()
   category: ChildCategoryDto;
 }

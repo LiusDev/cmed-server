@@ -37,6 +37,12 @@ export class Document {
   @Column({ default: 0 })
   view: number;
 
+  @Column({ default: 0 })
+  download: number;
+
+  @Column({ default: 0 })
+  pages: number
+
   @ManyToOne(() => Category, (category) => category.documents)
   category: Category;
 

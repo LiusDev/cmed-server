@@ -28,7 +28,7 @@ import { UpdateDocumentDto } from './dtos/update-document.dto';
 @Controller('documents')
 @Serialize(DocumentDto)
 export class DocumentsController {
-  constructor(private readonly documentsService: DocumentsService) {}
+  constructor(private readonly documentsService: DocumentsService) { }
 
   @Get()
   async findAll(
@@ -59,8 +59,13 @@ export class DocumentsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    return await this.documentsService.findOne(id);
+  async findOne(@Param('id') id: number, @Query('download') download?: string) {
+    if (download === '1') {
+      await this.documentsService.increaseDownloadCount(id);
+      return {}
+    } else {
+      return await this.documentsService.findOne(id);
+    }
   }
 
   @Post()

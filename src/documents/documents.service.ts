@@ -63,6 +63,15 @@ export class DocumentsService {
     });
   }
 
+  async increaseDownloadCount(id: number): Promise<void> {
+    const document = await this.repo.findOne({ where: { id } });
+    if (!document) {
+      throw new NotFoundException('Document not found');
+    }
+    document.download += 1;
+    await this.repo.save(document);
+  }
+
   async countAll({
     name,
     description,
@@ -83,15 +92,22 @@ export class DocumentsService {
     });
   }
 
-  async findOne(id: number): Promise<Document> {
-    return await this.repo.findOne({
+  async findOne(id: number, download: boolean = false): Promise<Document> {
+    const document = await this.repo.findOne({
       relations: {
         category: true,
         createdBy: true,
         modifiedBy: true,
       },
       where: { id },
-    });
+    })
+    if (download) {
+      document.download += 1
+    } else {
+      document.view += 1
+    }
+    await this.repo.update(document.id, { view: document.view, download: document.download })
+    return document;
   }
 
   async create(
