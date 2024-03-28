@@ -29,7 +29,7 @@ export class New {
   @Column("longtext")
   featuredImage: string;
 
-  @Column()
+  @Column("longtext")
   content: string;
 
   @Column({ default: 0 })
