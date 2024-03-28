@@ -27,7 +27,7 @@ import { User } from 'src/entities/user.entity';
 @Controller('news')
 @Serialize(NewDto)
 export class NewsController {
-  constructor(private readonly newsService: NewsService) {}
+  constructor(private readonly newsService: NewsService) { }
 
   @Get()
   async getAllNews(

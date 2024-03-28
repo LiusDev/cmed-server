@@ -26,7 +26,7 @@ export class New {
   @Column()
   description: string;
 
-  @Column("longblob")
+  @Column("longtext")
   featuredImage: string;
 
   @Column()

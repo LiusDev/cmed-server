@@ -15,7 +15,7 @@ export class NewsService {
     @InjectRepository(New) private readonly repo: Repository<New>,
     private readonly imagesService: ImagesService,
     private readonly categoriesService: CategoriesService,
-  ) {}
+  ) { }
 
   async findAll({
     title,
@@ -91,6 +91,8 @@ export class NewsService {
   async create(newItem: CreateNewDto, createdUser: User): Promise<New> {
     const { title, description, featuredImage, content, categoryId } = newItem;
 
+    const image = (await this.imagesService.uploadBase64Image('images', featuredImage)).secure_url
+
     const category = await this.categoriesService.findOne(categoryId);
     if (!category) {
       throw new NotFoundException('Category not found');
@@ -99,7 +101,7 @@ export class NewsService {
     const item = this.repo.create({
       title,
       description,
-      featuredImage: await toWebpString(featuredImage),
+      featuredImage: image,
       content,
       category,
       createdBy: createdUser,
@@ -131,7 +133,7 @@ export class NewsService {
 
     Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
-    if(featuredImage) {
+    if (featuredImage) {
       item.featuredImage = await toWebpString(featuredImage);
     }
     return this.repo.save(item);

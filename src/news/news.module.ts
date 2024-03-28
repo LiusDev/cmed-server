@@ -17,4 +17,4 @@ import { CategoriesModule } from 'src/categories/categories.module';
   providers: [NewsService],
   controllers: [NewsController],
 })
-export class NewsModule {}
+export class NewsModule { }
