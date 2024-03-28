@@ -19,13 +19,13 @@ export class Staff {
   @UpdateDateColumn()
   modifiedAt: Date;
 
-  @Column("longblob")
+  @Column("longtext")
   featuredImage: string;
 
   @Column()
   name: string;
 
-  @Column("text")
+  @Column("longtext")
   description: string;
 
   @Column()

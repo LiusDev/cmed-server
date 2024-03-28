@@ -6,11 +6,13 @@ import { CreateStaffDto } from './dtos/create-staff.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateStaffDto } from './dtos/update-staff.dto';
 import { toWebpString } from '../utils';
+import { ImagesService } from '../images/images.service';
 
 @Injectable()
 export class StaffsService {
   constructor(
     @InjectRepository(Staff) private readonly repo: Repository<Staff>,
+    private readonly imagesService: ImagesService,
   ) { }
 
   async findAll({
@@ -59,7 +61,7 @@ export class StaffsService {
     const staff = this.repo.create({
       name,
       position,
-      featuredImage: await toWebpString(featuredImage),
+      featuredImage: (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url,
       description,
       createdBy: createdUser,
     });
@@ -76,11 +78,12 @@ export class StaffsService {
     if (!staff) {
       throw new NotFoundException('Staff not found');
     }
-
-    Object.assign(staff, updateStaff);
+    const { featuredImage, ...rest } = updateStaff
+    Object.assign(staff, rest);
     staff.modifiedBy = modifiedUser;
-    if (updateStaff.featuredImage) {
-      staff.featuredImage = await toWebpString(updateStaff.featuredImage)
+    if (featuredImage && featuredImage.localeCompare(staff.featuredImage) !== 0) {
+      await this.imagesService.deleteImage(staff.featuredImage)
+      staff.featuredImage = (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url
     }
 
     return await this.repo.save(staff);
@@ -91,7 +94,7 @@ export class StaffsService {
     if (!staff) {
       throw new NotFoundException('Staff not found');
     }
-
+    await this.imagesService.deleteImage(staff.featuredImage);
     await this.repo.remove(staff);
   }
 }
