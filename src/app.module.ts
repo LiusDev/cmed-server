@@ -38,6 +38,7 @@ import { Setting } from './entities/Setting.entity';
 import { SettingService } from './setting/setting.service';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { SettingModule } from './setting/setting.module';
 
 @Module({
   imports: [
@@ -49,7 +50,6 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       username: process.env.DB_USERNAME,
       database: process.env.DB_DATABASE,
       entities: [
-        Setting,
         Category,
         Contact,
         Customer,
@@ -65,6 +65,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
         Recruitment,
         Slider,
         Banner,
+        Setting,
       ],
       synchronize: true,
     }),
@@ -85,7 +86,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     RecruitmentModule,
     SlidersModule,
     BannersModule,
-    CloudinaryModule
+    CloudinaryModule,
+    SettingModule
   ],
   controllers: [AppController],
   providers: [AppService],
