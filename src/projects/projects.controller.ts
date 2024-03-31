@@ -59,10 +59,7 @@ export class ProjectsController {
   @Get(':id')
   async findOne(@Param('id') id: number) {
     const data = await this.projectsService.findOne(id)
-    const tasks = data.images?.map(async (i) => "data:image/webp;base64," + (await sharp(i.image).webp().toBuffer()).toString("base64"))
-    const images = (await Promise.all(tasks))
-    const n = { ...data, images: images }
-    return n
+    return { ...data, images: data.images?.map(i => i.image) ?? [] }
   }
 
   @Post()

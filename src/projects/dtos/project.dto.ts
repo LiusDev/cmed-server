@@ -17,6 +17,9 @@ export class ProjectDto {
   description: string;
 
   @Expose()
+  subtitle: string;
+
+  @Expose()
   featuredImage: string;
 
   @Expose()

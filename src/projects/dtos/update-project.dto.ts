@@ -12,6 +12,10 @@ export class UpdateProjectDto {
   description: string;
 
   @IsString()
+  @MaxLength(255)
+  subtitle: string;
+
+  @IsString()
   @IsNotEmpty()
   featuredImage: string;
 

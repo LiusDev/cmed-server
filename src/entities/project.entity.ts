@@ -25,6 +25,9 @@ export class Project {
   name: string;
 
   @Column()
+  subtitle: string;
+
+  @Column()
   description: string;
 
   @Column("longtext")

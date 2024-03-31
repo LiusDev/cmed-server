@@ -97,7 +97,7 @@ export class ProjectsService {
     updateItem: UpdateProjectDto | Partial<UpdateProjectDto>,
     modifiedUser: User,
   ): Promise<Project> {
-    const item = await this.repo.findOneBy({ id });
+    const item = await this.repo.findOne({ where: { id }, relations: { images: true } })
     if (!item) {
       throw new NotFoundException('Project not found');
     }
@@ -111,13 +111,17 @@ export class ProjectsService {
     let check = false
 
     if (item.images && images.length != 0) check = areArraysDifferent(item.images.map(i => i.image), images)
-    else if (item.images == null && images.length != 0)
+    else if (item.images == null && images.length != 0) {
       item.images = []
+      check = true
+    }
 
     if (check) {
       const imagesToDelete = item.images.filter(i => !images.includes(i.image))
       imagesToDelete.forEach(i => item.images.splice(item.images.indexOf(i), 1))
-      await this.imagesService.deleteImage(...imagesToDelete.map(i => i.image))
+      if (imagesToDelete.length > 0)
+        await this.imagesService.deleteImage(...imagesToDelete.map(i => i.image))
+      this.childRepo.remove(imagesToDelete)
       const newImages = images.filter(i => i.startsWith("data:image"))
       const webpImages = await Promise.all(newImages.map(i => this.imagesService.uploadBase64Image("images", i).then(i => i.secure_url)))
       item.images.push(...webpImages.map(i => this.childRepo.create({ image: i })))

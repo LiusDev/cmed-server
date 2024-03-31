@@ -15,6 +15,9 @@ export class CreateProjectDto {
   @IsNotEmpty()
   featuredImage: string;
 
+  @IsString()
+  subtitle: string;
+
   @IsArray()
   images: string[]
 
