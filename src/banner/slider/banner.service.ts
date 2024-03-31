@@ -6,7 +6,6 @@ import { UpdateNewDto } from './dtos/update-banner.dto';
 import { User } from 'src/entities/user.entity';
 import { ImagesService } from 'src/images/images.service';
 import { Banner } from '../../entities/banner.entity';
-import { toWebpString } from '../../utils';
 
 @Injectable()
 export class BannersService {
