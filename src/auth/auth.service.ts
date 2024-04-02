@@ -8,13 +8,15 @@ import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+import { AuthCredentialsDto } from './dtos/auth-credentials.dto';
+import { UsersService } from '../users/users.service';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
-  ) {}
+    private readonly userService: UsersService,
+  ) { }
 
   private generatePayload(user: User) {
     const payload: JwtPayload = {
@@ -42,21 +44,16 @@ export class AuthService {
     return { accessToken };
   }
 
-  // async signUp(authCredentials: AuthCredentialsDto) {
-  //   const { username, password, name, role } = authCredentials;
-
-  //   const salt = await bcrypt.genSalt(10);
-  //   const hashedPassword = await bcrypt.hash(password, salt);
-
-  //   const user = await this.usersService.create({
-  //     username,
-  //     password: hashedPassword,
-  //     name,
-  //     role,
-  //   });
-
-  //   return this.getToken(user);
-  // }
+  async signUp(authCredentials: AuthCredentialsDto) {
+    const { username, password, name, role } = authCredentials;
+    const user = await this.userService.create({
+      username,
+      password: password,
+      name,
+      role,
+    });
+    return this.getToken(user);
+  }
 
   async validateUser(username: string, password: string) {
     const user = await this.usersRepository.findOneBy({ username });

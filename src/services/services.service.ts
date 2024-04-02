@@ -6,7 +6,6 @@ import { CreateServiceDto } from './dtos/create-service.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 import { ImagesService } from 'src/images/images.service';
-import { toWebpString } from '../utils';
 
 @Injectable()
 export class ServicesService {
@@ -66,13 +65,14 @@ export class ServicesService {
   }
 
   async create(newItem: CreateServiceDto, createdUser: User): Promise<Service> {
-    const { name, description, featuredImage, featuredImage2, content } = newItem;
-    const images = await Promise.all([featuredImage, featuredImage2].map(async (image) => this.imagesService.uploadBase64Image("images", image)))
+    const { name, description, featuredImage, featuredImage2, logo, content } = newItem;
+    const images = await Promise.all([featuredImage, featuredImage2, logo].map(async (image) => this.imagesService.uploadBase64Image("images", image)))
     const item = this.repo.create({
       name,
       description,
       featuredImage: images[0].secure_url,
       featuredImage2: images[1].secure_url,
+      logo: images[2].secure_url,
       content,
       createdBy: createdUser,
     });
@@ -89,14 +89,17 @@ export class ServicesService {
     if (!item) {
       throw new NotFoundException('Service not found');
     }
-    const { featuredImage, featuredImage2, ...rest } = updateItem;
+    const { featuredImage, featuredImage2, logo, ...rest } = updateItem;
     Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
-    if (featuredImage) {
+    if (featuredImage && featuredImage.startsWith("data:image")) {
       item.featuredImage = (await this.imagesService.uploadBase64Image("images", updateItem.featuredImage)).secure_url
     }
-    if (featuredImage2) {
+    if (featuredImage2 && featuredImage2.startsWith("data:image")) {
       item.featuredImage2 = (await this.imagesService.uploadBase64Image("images", updateItem.featuredImage2)).secure_url
+    }
+    if (logo && logo.startsWith("data:image")) {
+      item.logo = (await this.imagesService.uploadBase64Image("images", updateItem.logo)).secure_url
     }
     return await this.repo.save(item);
   }
@@ -106,7 +109,8 @@ export class ServicesService {
     if (!item) {
       throw new NotFoundException('Service not found');
     }
-    await Promise.all([this.imagesService.deleteImage(item.featuredImage), this.imagesService.deleteImage(item.featuredImage2)])
+    const images = [item.featuredImage, item.featuredImage2, item.logo].filter(i => i.startsWith("https://res.cloudinary.com"))
+    await this.imagesService.deleteImage(...images)
     await this.repo.remove(item);
   }
 }

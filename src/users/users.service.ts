@@ -15,7 +15,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 export class UsersService implements OnModuleInit {
   constructor(
     @InjectRepository(User) private readonly repo: Repository<User>,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     const admin = await this.repo.findOne({ where: { role: UserRole.ADMIN } });
@@ -74,13 +74,13 @@ export class UsersService implements OnModuleInit {
     if (checkUser) {
       throw new ConflictException('Username already exists');
     }
-
     const newUser = this.repo.create({
       username,
       password,
       name,
       role,
     });
+
     return await this.repo.save(newUser);
   }
 

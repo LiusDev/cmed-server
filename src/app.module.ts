@@ -39,6 +39,8 @@ import { SettingService } from './setting/setting.service';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SettingModule } from './setting/setting.module';
+import { HomeService } from './entities/home-service.entity';
+import { HomeServicesModule } from './home-service/home-services.module';
 
 @Module({
   imports: [
@@ -66,8 +68,9 @@ import { SettingModule } from './setting/setting.module';
         Slider,
         Banner,
         Setting,
+        HomeService
       ],
-      synchronize: true,
+      synchronize: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     NewsModule,
@@ -87,7 +90,8 @@ import { SettingModule } from './setting/setting.module';
     SlidersModule,
     BannersModule,
     CloudinaryModule,
-    SettingModule
+    SettingModule,
+    HomeServicesModule
   ],
   controllers: [AppController],
   providers: [AppService],

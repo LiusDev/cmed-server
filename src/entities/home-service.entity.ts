@@ -2,14 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Category } from './category.entity';
 
 @Entity()
-export class Service {
+export class HomeService {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,20 +27,23 @@ export class Service {
   @Column()
   description: string;
 
-  @Column("longtext")
-  featuredImage: string;
-
-  @Column("longtext")
-  featuredImage2: string;
-
-  @Column("longtext")
-  logo: string;
+  @Column({ default: -1 })
+  index: number
 
   @Column({ default: false })
   showInHome: boolean
 
-  @Column()
-  content: string;
+  @Column("json")
+  content: {
+    title: string
+    content: string
+    featuredImage: string;
+    featuredImage2: string;
+    logo: string
+  }[];
+
+  @ManyToOne(() => Category, (category) => category.homeServices)
+  category: Category
 
   @ManyToOne(() => User, (user) => user.createdServices)
   createdBy: User;

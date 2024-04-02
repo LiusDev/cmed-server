@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-export class CreateServiceDto {
+export class CreateHomeServiceDto {
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()
@@ -11,19 +11,18 @@ export class CreateServiceDto {
   @IsNotEmpty()
   description: string;
 
-  @IsString()
   @IsNotEmpty()
-  featuredImage: string;
+  index: number
 
-  @IsString()
   @IsNotEmpty()
-  logo: string;
+  categoryId: number
 
-  @IsString()
   @IsNotEmpty()
-  featuredImage2: string;
-
-  @IsString()
-  @IsNotEmpty()
-  content: string;
+  content: {
+    title: string
+    content: string
+    logo: string
+    featuredImage: string
+    featuredImage2: string
+  }[];
 }
