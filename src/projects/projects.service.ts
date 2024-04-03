@@ -111,10 +111,7 @@ export class ProjectsService {
     let check = false
 
     if (item.images && images.length != 0) check = areArraysDifferent(item.images.map(i => i.image), images)
-    else if (item.images == null && images.length != 0) {
-      item.images = []
-      check = true
-    }
+    if (images.length == 0 && item.images != null) check = true
 
     if (check) {
       const imagesToDelete = item.images.filter(i => !images.includes(i.image))
