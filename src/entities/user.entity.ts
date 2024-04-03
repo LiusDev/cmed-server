@@ -15,7 +15,7 @@ import { Service } from './service.entity';
 import { Partner } from './partner.entity';
 import { Customer } from './customer.entity';
 import { Recruitment } from './recruitment.entity';
-import { Setting } from './Setting.entity';
+import { Setting } from './setting.entity';
 
 export enum UserRole {
   STAFF = 'staff',

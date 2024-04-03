@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SettingController } from './setting.controller';
 import { SettingService as SettingService } from './setting.service';
-import { Setting } from '../entities/Setting.entity';
+import { Setting } from '../entities/setting.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImagesModule } from '../images/images.module';
 import { AuthModule } from '../auth/auth.module';

@@ -34,7 +34,7 @@ import { SlidersModule } from './slider/slider.module';
 import { Banner } from './entities/banner.entity';
 import { BannersModule } from './banner/slider/banner.module';
 import { ProjectImage } from './entities/project_image.entity';
-import { Setting } from './entities/Setting.entity';
+import { Setting } from './entities/setting.entity';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SettingModule } from './setting/setting.module';
 import { HomeService } from './entities/home-service.entity';

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Setting } from '../entities/Setting.entity';
+import { Setting } from '../entities/setting.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateSettingDto } from './dtos/create-setting.dto';
 import { User } from '../entities/user.entity';
