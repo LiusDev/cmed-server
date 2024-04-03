@@ -33,7 +33,7 @@ export class Project {
   @Column("longtext")
   featuredImage: string;
 
-  @Column()
+  @Column("longtext")
   content: string;
 
   @OneToMany(() => ProjectImage, (pi) => pi.project, { cascade: ["insert", "update", "remove"] })
