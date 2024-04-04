@@ -12,18 +12,18 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common';
-import { HomeServicesService } from './home-services.service';
+import { ConstServicesService } from './const-services.service';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { HomeServiceDto } from './dtos/home-service.dto';
+import { ConstServiceDto } from './dtos/const-service.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CreateHomeServiceDto } from './dtos/create-home-service.dto';
+import { CreateConstServiceDto } from './dtos/create-const-service.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/entities/user.entity';
 import { Response } from 'express';
 
-@Controller('homeservices')
-export class HomeServicesController {
-  constructor(private readonly homeServicesService: HomeServicesService) { }
+@Controller('constservices')
+export class ConstServicesController {
+  constructor(private readonly homeServicesService: ConstServicesService) { }
 
   @Get()
   async findAll(
@@ -37,23 +37,18 @@ export class HomeServicesController {
       order?: string;
     },
   ) {
-    const data = await this.homeServicesService.findAll(query)
-    return data;
+    return await this.homeServicesService.findAll(query);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return await this.homeServicesService.findOne(id);
-  }
-
-  @Get("top4")
-  async top4() {
-    return await this.homeServicesService.getTop4()
+    const data = await this.homeServicesService.findOne(id);
+    return data;
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() body: CreateHomeServiceDto, @GetUser() createdUser: User) {
+  async create(@Body() body: CreateConstServiceDto, @GetUser() createdUser: User) {
     return await this.homeServicesService.create(body, createdUser);
   }
 
@@ -61,7 +56,7 @@ export class HomeServicesController {
   @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: number,
-    @Body() body: CreateHomeServiceDto,
+    @Body() body: CreateConstServiceDto,
     @GetUser() modifiedUser: User,
   ) {
     return await this.homeServicesService.update(id, body, modifiedUser);
@@ -71,7 +66,7 @@ export class HomeServicesController {
   @UseGuards(JwtAuthGuard)
   async partialUpdate(
     @Param('id') id: number,
-    @Body() body: Partial<CreateHomeServiceDto>,
+    @Body() body: Partial<CreateConstServiceDto>,
     @GetUser() modifiedUser: User,
   ) {
     return await this.homeServicesService.update(id, body, modifiedUser);

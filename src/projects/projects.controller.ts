@@ -21,7 +21,6 @@ import { User } from 'src/entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { Response } from 'express';
-import * as sharp from "sharp";
 
 
 @Controller('projects')

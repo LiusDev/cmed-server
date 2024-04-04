@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class HomeServiceDto {
+export class ConstServiceDto {
   @Expose()
   id: number;
 

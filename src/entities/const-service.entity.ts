@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,7 +10,7 @@ import { User } from './user.entity';
 import { Category } from './category.entity';
 
 @Entity()
-export class HomeService {
+export class ConstService {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -24,23 +23,23 @@ export class HomeService {
   @Column()
   name: string;
 
-  @Column()
+  @Column("longtext")
   description: string;
 
   @Column({ default: -1 })
   index: number
 
-  @Column({ default: false })
-  showInHome: boolean
+  @Column()
+  title: string
 
-  @Column("json")
-  content: {
-    title: string
-    content: string
-    featuredImage: string;
-    featuredImage2: string;
-    logo: string
-  }[];
+  @Column("longtext")
+  content: string
+  @Column()
+  featuredImage: string;
+  @Column()
+  featuredImage2: string;
+  @Column()
+  logo: string
 
   @ManyToOne(() => Category, (category) => category.homeServices)
   category: Category

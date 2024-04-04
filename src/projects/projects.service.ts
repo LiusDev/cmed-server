@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from 'src/entities/project.entity';
 import { Like, Repository } from 'typeorm';
@@ -79,17 +79,21 @@ export class ProjectsService {
   }
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
-    const { name, description, featuredImage, content, images } = newItem;
-    const webpImages = await Promise.all(images?.map(i => this.imagesService.uploadBase64Image("images", i)) ?? [])
-    const item = this.repo.create({
-      name,
-      description,
-      featuredImage: (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url,
-      content,
-      images: webpImages.map(i => this.childRepo.create({ image: i.secure_url })),
-      createdBy: createdUser,
-    });
-    return await this.repo.save(item);
+    try {
+      const { name, description, featuredImage, content, images } = newItem;
+      const webpImages = await Promise.all(images?.map(i => this.imagesService.uploadBase64Image("images", i)) ?? [])
+      const item = this.repo.create({
+        name,
+        description,
+        featuredImage: (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url,
+        content,
+        images: webpImages.map(i => this.childRepo.create({ image: i.secure_url })),
+        createdBy: createdUser,
+      });
+      return await this.repo.save(item);
+    } catch (error) {
+      throw new HttpException(JSON.stringify(error), 500);
+    }
   }
 
   async update(

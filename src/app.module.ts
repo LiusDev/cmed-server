@@ -7,17 +7,6 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ImagesModule } from './images/images.module';
 import { ConfigModule } from '@nestjs/config';
-import { New } from './entities/new.entity';
-import { User } from './entities/user.entity';
-import { Category } from './entities/category.entity';
-import { Contact } from './entities/contact.entity';
-import { Customer } from './entities/customer.entity';
-import { Document } from './entities/document.entity';
-import { Metadata } from './entities/metadata.entity';
-import { Partner } from './entities/partner.entity';
-import { Project } from './entities/project.entity';
-import { Service } from './entities/service.entity';
-import { Staff } from './entities/staff.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { DocumentsModule } from './documents/documents.module';
 import { PartnersModule } from './partners/partners.module';
@@ -28,17 +17,12 @@ import { CustomersModule } from './customers/customers.module';
 import { MetadataModule } from './metadata/metadata.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { RecruitmentModule } from './recruitment/recruitment.module';
-import { Recruitment } from './entities/recruitment.entity';
-import { Slider } from './entities/slider.entity';
 import { SlidersModule } from './slider/slider.module';
-import { Banner } from './entities/banner.entity';
 import { BannersModule } from './banner/slider/banner.module';
-import { ProjectImage } from './entities/project_image.entity';
-import { Setting } from './entities/setting.entity';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SettingModule } from './setting/setting.module';
-import { HomeService } from './entities/home-service.entity';
-import { HomeServicesModule } from './home-service/home-services.module';
+import { HomeServicesModule as ConstServicesModule } from './home-service/const-services.module';
+import { Document, Banner, Category, ConstService, Contact, Customer, Metadata, New, Partner, Project, ProjectImage, Recruitment, Service, Setting, Slider, Staff, User } from './entities';
 
 @Module({
   imports: [
@@ -66,7 +50,7 @@ import { HomeServicesModule } from './home-service/home-services.module';
         Slider,
         Banner,
         Setting,
-        HomeService
+        ConstService
       ],
       synchronize: false,
     }),
@@ -89,7 +73,7 @@ import { HomeServicesModule } from './home-service/home-services.module';
     BannersModule,
     CloudinaryModule,
     SettingModule,
-    HomeServicesModule
+    ConstServicesModule
   ],
   controllers: [AppController],
   providers: [AppService],

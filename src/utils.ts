@@ -1,4 +1,5 @@
 import * as sharp from "sharp";
+import type { ImagesService } from "./images/images.service";
 
 export async function toWebpString(data: string) {
 
@@ -26,4 +27,27 @@ export function areArraysDifferent(arr1: string[], arr2: string[]): boolean {
     }
 
     return false;
+}
+
+export function deleteImages<T extends Object>(images: Array<keyof T>, object: T, imagesService: ImagesService) {
+    const filtedImages = images.filter(i => (object[i] as string).startsWith("https://res.cloudinary.com/"))
+    if (filtedImages.length == 0) return Promise.resolve();
+    return imagesService.deleteImage(...filtedImages.map(i => object[i] as string));
+}
+
+export function updateImage<T extends Object>(images: { [key in keyof T]?: string }, object: T, imagesService: ImagesService) {
+    const deleteImages = Array<string>();
+    const tasks = Array<Promise<void>>();
+    for (const key in images) {
+        const image = images[key];
+        if (image.startsWith("data:image/")) {
+            deleteImages.push(object[key] as string);
+            tasks.push(imagesService.uploadBase64Image("images", image).then(r => {
+                object[key] = r.secure_url as any;
+            }))
+        }
+    }
+    if (deleteImages.length > 0)
+        tasks.push(imagesService.deleteImage(...deleteImages));
+    return Promise.all(tasks);
 }

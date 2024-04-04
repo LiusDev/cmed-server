@@ -10,7 +10,7 @@ import {
 import { User } from './user.entity';
 import { New } from './new.entity';
 import { Document } from './document.entity';
-import { HomeService } from './home-service.entity';
+import { ConstService } from './const-service.entity';
 
 @Entity()
 export class Category {
@@ -38,6 +38,6 @@ export class Category {
   @ManyToOne(() => User, (user) => user.modifiedCategories)
   modifiedBy: User;
 
-  @OneToMany(() => HomeService, (homeServices) => homeServices.category)
-  homeServices : HomeService[]
+  @OneToMany(() => ConstService, (homeServices) => homeServices.category)
+  homeServices : ConstService[]
 }
