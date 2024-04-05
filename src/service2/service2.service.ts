@@ -134,12 +134,15 @@ export class Service2Service {
     Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
 
-    if (item.category.id !== updateItem.categoryId) {
+    if (updateItem.categoryId && ((item.category == null) || (item.category.id !== updateItem.categoryId))) {
       const category = await this.categoryRepo.findOne({ where: { id: updateItem.categoryId } })
       item.category = category
     }
 
-    const deleteImages = item.content.map(i => i.logo).filter(i => i.startsWith("https://res.cloudinary.com/"))
+    const deleteImages = []
+    if (item.content instanceof Array) {
+      deleteImages.push(...item.content.map(i => i.logo).filter(i => i.startsWith("https://res.cloudinary.com/")))
+    }
     if (deleteImages.length > 0)
       await this.imagesService.deleteImage(...deleteImages)
 
@@ -148,18 +151,18 @@ export class Service2Service {
     await Promise.all(
       content.map(c => {
         const tasks: Promise<void>[] = []
-        if (c.logo.startsWith("https://res.cloudinary.com/"))
+        if (c.logo.startsWith("data:image/"))
           tasks.push(this.imagesService.uploadBase64Image("images", c.logo).then(r => {
             c.logo = r.secure_url
           }))
 
-        if (c.featuredImage.startsWith("https://res.cloudinary.com/")) {
+        if (c.featuredImage.startsWith("data:image/")) {
           tasks.push(this.imagesService.uploadBase64Image("images", c.featuredImage).then(r => {
             c.featuredImage = r.secure_url
           }))
         }
 
-        if (c.featuredImage2.startsWith("https://res.cloudinary.com/")) {
+        if (c.featuredImage2.startsWith("data:image/")) {
           tasks.push(
             this.imagesService.uploadBase64Image("images", c.featuredImage2).then(r => {
               c.featuredImage2 = r.secure_url

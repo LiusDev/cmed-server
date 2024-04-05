@@ -17,6 +17,7 @@ export class UpdateService2Dto {
     content: string
     featuredImage: string;
     featuredImage2: string;
+    index: number
     logo: string
   }[];
 

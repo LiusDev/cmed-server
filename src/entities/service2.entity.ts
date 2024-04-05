@@ -24,7 +24,7 @@ export class Service2 {
   @Column()
   name: string;
 
-  @Column()
+  @Column("longtext")
   description: string;
 
   @Column({ default: -1 })

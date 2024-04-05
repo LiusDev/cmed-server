@@ -7,7 +7,6 @@ export class CreateService2Dto {
   name: string;
 
   @IsString()
-  @MaxLength(255)
   @IsNotEmpty()
   description: string;
 
@@ -22,6 +21,7 @@ export class CreateService2Dto {
     title: string
     content: string
     logo: string
+    index: number
     featuredImage: string
     featuredImage2: string
   }[];
