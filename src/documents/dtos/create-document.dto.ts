@@ -15,5 +15,11 @@ export class CreateDocumentDto {
   description: string;
 
   @IsNotEmpty()
+  view:number
+
+  @IsNotEmpty()
+  download:number
+
+  @IsNotEmpty()
   categoryId: number;
 }

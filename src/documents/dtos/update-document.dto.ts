@@ -17,4 +17,10 @@ export class UpdateDocumentDto {
 
   @IsString()
   featuredImage: string;
+
+  @IsNotEmpty()
+  view:number
+
+  @IsNotEmpty()
+  download:number
 }
