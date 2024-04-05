@@ -21,8 +21,9 @@ import { SlidersModule } from './slider/slider.module';
 import { BannersModule } from './banner/slider/banner.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SettingModule } from './setting/setting.module';
-import { HomeServicesModule as ConstServicesModule } from './home-service/const-services.module';
 import { Document, Banner, Category, ConstService, Contact, Customer, Metadata, New, Partner, Project, ProjectImage, Recruitment, Service, Setting, Slider, Staff, User } from './entities';
+import { Service2 } from './entities/service2.entity';
+import { Service2Module } from './service2/service2.module';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { Document, Banner, Category, ConstService, Contact, Customer, Metadata, 
         Slider,
         Banner,
         Setting,
-        ConstService
+        ConstService,
+        Service2
       ],
       synchronize: false,
     }),
@@ -73,7 +75,8 @@ import { Document, Banner, Category, ConstService, Contact, Customer, Metadata, 
     BannersModule,
     CloudinaryModule,
     SettingModule,
-    ConstServicesModule
+    ServicesModule,
+    Service2Module
   ],
   controllers: [AppController],
   providers: [AppService],
