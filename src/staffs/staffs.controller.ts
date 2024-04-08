@@ -20,6 +20,7 @@ import { User } from 'src/entities/user.entity';
 import { Response, query } from 'express';
 import { StaffDto } from './dtos/staff.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
+import type { UpdateStaffDto } from './dtos/update-staff.dto';
 
 @Controller('staffs')
 @Serialize(StaffDto)
@@ -56,7 +57,7 @@ export class StaffsController {
   @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: number,
-    @Body() body: CreateStaffDto,
+    @Body() body: UpdateStaffDto,
     @GetUser() modifiedUser: User,
   ) {
     return await this.staffsService.update(id, body, modifiedUser);
@@ -66,7 +67,7 @@ export class StaffsController {
   @UseGuards(JwtAuthGuard)
   async partialUpdate(
     @Param('id') id: number,
-    @Body() body: Partial<CreateStaffDto>,
+    @Body() body: Partial<UpdateStaffDto>,
     @GetUser() modifiedUser: User,
   ) {
     return await this.staffsService.update(id, body, modifiedUser);

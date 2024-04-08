@@ -11,10 +11,32 @@ export class UpdateStaffDto {
   name: string;
 
   @IsString()
+  @MaxLength(255)
+  nameJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  nameEN: string;
+
+  @IsString()
   description: string;
+
+  @IsString()
+  descriptionJP: string;
+
+  @IsString()
+  descriptionEN: string;
 
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()
   position: string;
+
+  @IsString()
+  @MaxLength(255)
+  positionJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  positionEN: string;
 }
