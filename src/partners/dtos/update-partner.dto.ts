@@ -7,6 +7,12 @@ export class UpdatePartnerDto {
   name: string;
 
   @IsString()
+  nameJP: string;
+
+  @IsString()
+  nameEN: string;
+
+  @IsString()
   @IsNotEmpty()
   image: string;
 }

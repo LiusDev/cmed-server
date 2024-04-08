@@ -15,5 +15,11 @@ export class PartnerDto {
   name: string;
 
   @Expose()
+  nameJP: string;
+
+  @Expose()
+  nameEN: string;
+
+  @Expose()
   image: string;
 }

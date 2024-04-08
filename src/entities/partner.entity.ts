@@ -22,6 +22,12 @@ export class Partner {
   @Column()
   name: string;
 
+  @Column({ default: "" })
+  nameJP: string;
+
+  @Column({ default: "" })
+  nameEN: string;
+
   @Column("longtext")
   image: string;
 
