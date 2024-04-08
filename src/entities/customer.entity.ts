@@ -22,8 +22,20 @@ export class Customer {
   @Column()
   name: string;
 
+  @Column()
+  nameJP: string;
+
+  @Column()
+  nameEN: string;
+
   @Column({ nullable: true })
   description: string;
+
+  @Column({ nullable: true })
+  descriptionJP: string;
+
+  @Column({ nullable: true })
+  descriptionEN: string;
 
   @Column("longtext")
   image: string;

@@ -5,6 +5,11 @@ export class UpdateCustomerDto {
   @MaxLength(255)
   @IsNotEmpty()
   name: string;
+  @IsString()
+  nameJP: string;
+
+  @IsString()
+  nameEN: string;
 
   @IsString()
   image: string;
@@ -19,4 +24,13 @@ export class UpdateCustomerDto {
   @MaxLength(255)
   @IsNotEmpty()
   description: string;
+
+  @IsString()
+  @MaxLength(255)
+  descriptionJP: string;
+
+
+  @IsString()
+  @MaxLength(255)
+  descriptionEN: string;
 }

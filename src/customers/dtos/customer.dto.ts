@@ -15,7 +15,19 @@ export class CustomerDto {
   name: string;
 
   @Expose()
+  nameJP: string
+
+  @Expose()
+  nameEN: string
+
+  @Expose()
   description: string;
+
+  @Expose()
+  descriptionJP: string;
+
+  @Expose()
+  descriptionEN: string;
 
   @Expose()
   image: string;
