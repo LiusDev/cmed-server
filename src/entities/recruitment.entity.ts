@@ -19,14 +19,28 @@ export class Recruitment {
   @UpdateDateColumn()
   modifiedAt: Date;
 
-  @Column()
+  @Column({ default: "" })
   title: string;
+
+  @Column({ default: "" })
+  titleJP: string;
+
+  @Column({ default: "" })
+
+  titleEN: string;
 
   @Column()
   deadline: Date;
 
-  @Column("longtext")
+  @Column("longtext", { default: "" })
   content: string;
+
+  @Column("longtext", { default: "" })
+  contentJP: string;
+
+  @Column("longtext", { default: "" })
+  contentEN: string;
+
 
   @ManyToOne(() => User, (user) => user.createdRecruitments)
   createdBy: User;

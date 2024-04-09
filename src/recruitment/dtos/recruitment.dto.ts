@@ -14,8 +14,21 @@ export class RecruitmentDto {
   title: string;
 
   @Expose()
+  titileJP: string;
+
+  @Expose()
+  titleEN: string;
+
+  @Expose()
   deadline: Date;
 
   @Expose()
   content: string;
+
+  @Expose()
+  contentJP: string;
+
+  @Expose()
+  contentEN: string;
+
 }
