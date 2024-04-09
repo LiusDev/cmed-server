@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsString,
   MaxLength,
+  maxLength,
 } from 'class-validator';
 
 export class CreateNewDto {
@@ -14,8 +15,24 @@ export class CreateNewDto {
 
   @IsString()
   @MaxLength(255)
+  titleJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  titleEN: string;
+
+  @IsString()
+  @MaxLength(255)
   @IsNotEmpty()
   description: string;
+
+  @IsString()
+  @MaxLength(255)
+  descriptionJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  descriptionEN: string;
 
   @IsString()
   @IsNotEmpty()
@@ -24,6 +41,12 @@ export class CreateNewDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsString()
+  contentJP: string;
+
+  @IsString()
+  contentEN: string;
 
   @IsNumber()
   categoryId: number;

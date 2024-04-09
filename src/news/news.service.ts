@@ -133,8 +133,11 @@ export class NewsService {
 
     Object.assign(item, rest);
     item.modifiedBy = modifiedUser;
-    if (featuredImage) {
-      item.featuredImage = await toWebpString(featuredImage);
+    if (featuredImage && featuredImage.startsWith('data:image')) {
+      await Promise.all([
+        this.imagesService.deleteImage(item.featuredImage),
+        this.imagesService.uploadBase64Image("images", featuredImage).then(r => item.featuredImage = r.secure_url)
+      ])
     }
     return this.repo.save(item);
   }

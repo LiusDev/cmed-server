@@ -15,13 +15,31 @@ export class NewDto {
   title: string;
 
   @Expose()
+  titleJP: string
+
+  @Expose()
+  titleEN: string
+
+  @Expose()
   description: string;
+
+  @Expose()
+  descriptionJP: string;
+
+  @Expose()
+  descriptionEN: string;
 
   @Expose()
   featuredImage: string;
 
   @Expose()
   content: string;
+
+  @Expose()
+  contentJP: string;
+
+  @Expose()
+  contentEN: string;
 
   @Expose()
   view: number;

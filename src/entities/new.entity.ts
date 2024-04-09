@@ -20,17 +20,36 @@ export class New {
   @UpdateDateColumn()
   modifiedAt: Date;
 
-  @Column("text")
+  @Column("text", { default: "" })
   title: string;
 
-  @Column()
+  @Column("text", { default: "" })
+  titleJP: string;
+
+  @Column("text", { default: "" })
+  titleEN: string;
+
+  @Column({ default: "" })
   description: string;
+
+  @Column({ default: "" })
+  descriptionJP: string;
+
+  @Column({ default: "" })
+  descriptionEN: string;
 
   @Column("longtext")
   featuredImage: string;
 
-  @Column("longtext")
+
+  @Column("longtext", { default: "" })
   content: string;
+
+  @Column("longtext", { default: "" })
+  contentJP: string;
+
+  @Column("longtext", { default: "" })
+  contentEN: string;
 
   @Column({ default: 0 })
   view: number;
