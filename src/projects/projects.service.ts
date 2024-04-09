@@ -6,8 +6,7 @@ import { CreateProjectDto } from './dtos/create-project.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateProjectDto } from './dtos/update-project.dto';
 import { ProjectImage } from '../entities/project_image.entity';
-import { areArraysDifferent, toWebp, toWebpString } from '../utils';
-import sharp from 'sharp';
+import { areArraysDifferent } from '../utils';
 import { ImagesService } from '../images/images.service';
 
 @Injectable()
@@ -80,13 +79,11 @@ export class ProjectsService {
 
   async create(newItem: CreateProjectDto, createdUser: User): Promise<Project> {
     try {
-      const { name, description, featuredImage, content, images } = newItem;
+      const { featuredImage, images, ...rest } = newItem;
       const webpImages = await Promise.all(images?.map(i => this.imagesService.uploadBase64Image("images", i)) ?? [])
       const item = this.repo.create({
-        name,
-        description,
+        ...rest,
         featuredImage: (await this.imagesService.uploadBase64Image("images", featuredImage)).secure_url,
-        content,
         images: webpImages.map(i => this.childRepo.create({ image: i.secure_url })),
         createdBy: createdUser,
       });

@@ -24,17 +24,45 @@ export class Project {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: "" })
+  nameJP: string;
+
+  @Column({ default: "" })
+  nameEN: string;
+
+  @Column({ default: "" })
   subtitle: string;
 
-  @Column()
+  @Column({ default: "" })
+  subtitleJP: string;
+
+
+  @Column({ default: "" })
+  subtitleEN: string;
+
+  @Column({ default: "" })
   description: string;
 
-  @Column("longtext")
+  @Column({ default: "" })
+
+  descriptionJP: string;
+
+  @Column({ default: "" })
+
+  descriptionEN: string;
+
+
+  @Column("longtext",{ default: "" })
   featuredImage: string;
 
-  @Column("longtext")
+  @Column("longtext",{ default: "" })
   content: string;
+
+  @Column("longtext",{ default: "" })
+  contentJP: string;
+
+  @Column("longtext", { default: "" })
+  contentEN: string;
 
   @OneToMany(() => ProjectImage, (pi) => pi.project, { cascade: ["insert", "update", "remove"] })
   images: ProjectImage[]

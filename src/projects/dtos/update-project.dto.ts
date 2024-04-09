@@ -8,12 +8,38 @@ export class UpdateProjectDto {
 
   @IsString()
   @MaxLength(255)
+  nameEN: string;
+
+  @IsString()
+  @MaxLength(255)
+  nameJP: string;
+
+  @IsString()
+  @MaxLength(255)
   @IsNotEmpty()
   description: string;
+
+  
+  @IsString()
+  @MaxLength(255)
+  descriptionEN: string;
+
+  
+  @IsString()
+  @MaxLength(255)
+  descriptionJP: string;
 
   @IsString()
   @MaxLength(255)
   subtitle: string;
+
+  @IsString()
+  @MaxLength(255)
+  subtitleEN: string;
+
+  @IsString()
+  @MaxLength(255)
+  subtitleJP: string;
 
   @IsString()
   @IsNotEmpty()
@@ -25,4 +51,11 @@ export class UpdateProjectDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsString()
+  contentJP: string;
+
+
+  @IsString()
+  contentEN: string;
 }
