@@ -9,18 +9,44 @@ export class Metadata {
   companyName: string;
 
   @Column({ default: '' })
+  companyNameJP: string;
+
+  @Column({ default: '' })
+  companyNameEN: string
+
+  @Column({ default: '' })
   companyPhone: string;
+
+  @Column({ default: '' })
+  companyPhoneJP: string;
+
+  @Column({ default: '' })
+  companyPhoneEN: string;
+
+  @Column({ default: '' })
 
   @Column({ default: '' })
   companyEmail: string;
 
   @Column({ default: '' })
+  companyEmailJP: string;
+
+  @Column({ default: '' })
+  companyEmailEN: string;
+
+  @Column({ default: '' })
   companyAddress: string;
 
-  @Column("longblob")
+  @Column({ default: '' })
+  companyAddressJP: string;
+
+  @Column({ default: '' })
+  companyAddressEN: string;
+
+  @Column("longtext")
   ceoImage: string;
 
-  @Column("text")
+  @Column("longtext")
   quoteImage: string;
 
 }
