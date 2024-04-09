@@ -29,7 +29,19 @@ export class Document {
   name: string;
 
   @Column()
+  nameJP: string;
+
+  @Column()
+  nameEN: string;
+
+  @Column()
   description: string;
+
+  @Column()
+  descriptionJP: string;
+
+  @Column()
+  descriptionEN: string;
 
   @Column()
   document: string;

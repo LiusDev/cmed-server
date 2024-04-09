@@ -115,22 +115,21 @@ export class DocumentsService {
     file: Express.Multer.File,
     createdUser: User,
   ): Promise<Document> {
-    const { name, description, categoryId } = newItem;
+    const { categoryId, featuredImage, ...rest } = newItem;
 
     const category = await this.categoriesService.findOne(categoryId);
     if (!category) {
       throw new NotFoundException('Category not found');
     }
 
-    const [filePath, featuredImage] = await Promise.all([this.cloudinaryService.uploadFile(file, {
+    const [filePath, featuredImageUrl] = await Promise.all([this.cloudinaryService.uploadFile(file, {
       format: "pdf"
-    }).then(i => i.secure_url), this.imagesService.uploadBase64Image("images", newItem.featuredImage).then(i => i.secure_url)])
+    }).then(i => i.secure_url), this.imagesService.uploadBase64Image("images", featuredImage).then(i => i.secure_url)])
 
     const item = this.repo.create({
-      name,
-      description,
+      ...rest,
       document: filePath,
-      featuredImage,
+      featuredImage: featuredImageUrl,
       category,
       createdBy: createdUser,
     });
@@ -144,14 +143,17 @@ export class DocumentsService {
     updateItem: UpdateDocumentDto | Partial<UpdateDocumentDto>,
     modifiedUser: User,
   ): Promise<Document> {
-    const item = await this.repo.findOneBy({ id });
+    const item = await this.repo.findOne({
+      where: { id },
+    });
+
     if (!item) {
       throw new NotFoundException('Document not found');
     }
 
     const { categoryId, featuredImage, ...rest } = updateItem;
 
-    if (categoryId) {
+    if (categoryId && (item.category == null || categoryId !== item.category.id)) {
       const category = await this.categoriesService.findOne(categoryId);
       if (!category) {
         throw new NotFoundException('Category not found');
@@ -170,8 +172,8 @@ export class DocumentsService {
       item.featuredImage = await toWebpString(updateItem.featuredImage)
     }
     item.modifiedBy = modifiedUser;
-
-    return await this.repo.save(item);
+    const result = await this.repo.update(id, item)
+    return item;
   }
 
   async delete(id: number) {

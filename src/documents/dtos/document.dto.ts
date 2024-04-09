@@ -18,7 +18,19 @@ export class DocumentDto {
   name: string;
 
   @Expose()
+  nameJP: string
+
+  @Expose()
+  nameEN: string
+
+  @Expose()
   description: string;
+
+  @Expose()
+  descriptionJP: string;
+
+  @Expose()
+  deescriptionEN: string;
 
   @Expose()
   document: string;

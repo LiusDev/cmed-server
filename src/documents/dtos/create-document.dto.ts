@@ -5,6 +5,15 @@ export class CreateDocumentDto {
   @MaxLength(255)
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @MaxLength(255)
+  nameJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  nameEN: string;
+
   @IsString()
   @IsNotEmpty()
   featuredImage: string;
@@ -13,6 +22,12 @@ export class CreateDocumentDto {
   @MaxLength(255)
   @IsNotEmpty()
   description: string;
+
+  @IsString()
+  descriptionJP: string;
+
+  @IsString()
+  descriptionEN: string;
 
   @IsNotEmpty()
   view:number
