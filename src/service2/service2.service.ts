@@ -69,7 +69,7 @@ export class Service2Service {
   }
 
   async create(newItem: CreateService2Dto, createdUser: User): Promise<Service2> {
-    const { name, description, index, content } = newItem;
+    const { content, ...rest } = newItem;
 
     const category = await this.categoryRepo.findOne({ where: { id: newItem.categoryId } })
 
@@ -99,10 +99,8 @@ export class Service2Service {
     )
 
     const item = this.repo.create({
-      name,
-      description,
+      ...rest,
       content,
-      index,
       category,
       createdBy: createdUser,
     });

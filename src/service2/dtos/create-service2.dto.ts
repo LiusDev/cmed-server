@@ -7,8 +7,22 @@ export class CreateService2Dto {
   name: string;
 
   @IsString()
+  @MaxLength(255)
+  nameJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  nameEN: string;
+
+  @IsString()
   @IsNotEmpty()
   description: string;
+
+  @IsString()
+  descriptionJP: string;
+
+  @IsString()
+  descriptionEN: string;
 
   @IsNotEmpty()
   index: number
@@ -19,7 +33,11 @@ export class CreateService2Dto {
   @IsNotEmpty()
   content: {
     title: string
+    titleJP: string
+    titleEN: string
     content: string
+    contentJP: string
+    contentEN: string
     logo: string
     index: number
     featuredImage: string

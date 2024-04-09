@@ -24,8 +24,21 @@ export class Service2 {
   @Column()
   name: string;
 
+  @Column()
+  nameEN: string
+
+  @Column()
+  nameJP: string
+
   @Column("longtext")
   description: string;
+
+  @Column("longtext")
+  descriptionEN: string;
+
+  @Column("longtext")
+  descriptionJP: string;
+
 
   @Column({ default: -1 })
   index: number
@@ -36,7 +49,11 @@ export class Service2 {
   @Column("json")
   content: {
     title: string
+    titleJP: string
+    titleEN: string
     content: string
+    contentJP: string
+    contentEN: string
     featuredImage: string;
     featuredImage2: string;
     logo: string
