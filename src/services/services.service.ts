@@ -65,15 +65,13 @@ export class ServicesService {
   }
 
   async create(newItem: CreateServiceDto, createdUser: User): Promise<Service> {
-    const { name, description, featuredImage, featuredImage2, logo, content } = newItem;
+    const { featuredImage, featuredImage2, logo, ...rest } = newItem;
     const images = await Promise.all([featuredImage, featuredImage2, logo].map(async (image) => this.imagesService.uploadBase64Image("images", image)))
     const item = this.repo.create({
-      name,
-      description,
+      ...rest,
       featuredImage: images[0].secure_url,
       featuredImage2: images[1].secure_url,
       logo: images[2].secure_url,
-      content,
       createdBy: createdUser,
     });
 

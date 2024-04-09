@@ -12,6 +12,14 @@ export class UpdateRecruitmentDto {
   @IsNotEmpty()
   title: string;
 
+  @IsString()
+  @MaxLength(255)
+  titleEN: string;
+
+  @IsString()
+  @MaxLength(255)
+  titleJP: string;
+
   @IsDateString()
   @IsNotEmpty()
   deadline: string;
@@ -19,4 +27,10 @@ export class UpdateRecruitmentDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsString()
+  contentJP: string;
+
+  @IsString()
+  contentEN: string;
 }

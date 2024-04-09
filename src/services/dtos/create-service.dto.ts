@@ -8,8 +8,25 @@ export class CreateServiceDto {
 
   @IsString()
   @MaxLength(255)
+  nameJP: string;
+
+  @IsString()
+  @MaxLength(255)
+  nameEN: string;
+
+  @IsString()
+  @MaxLength(255)
   @IsNotEmpty()
   description: string;
+
+  @IsString()
+  @MaxLength(255)
+  descriptionEN: string;
+
+
+  @IsString()
+  @MaxLength(255)
+  descriptionJP: string;
 
   @IsString()
   @IsNotEmpty()
@@ -26,4 +43,10 @@ export class CreateServiceDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsString()
+  contentJP: string;
+
+  @IsString()
+  contentEN: string;
 }

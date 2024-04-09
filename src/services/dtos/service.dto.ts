@@ -14,7 +14,20 @@ export class ServiceDto {
   name: string;
 
   @Expose()
+  nameJP: string;
+
+  @Expose()
+  nameEN: string
+
+  @Expose()
   description: string;
+
+
+  @Expose()
+  descriptionJP: string;
+
+  @Expose()
+  descriptionEN: string;
 
   @Expose()
   featuredImage: string;
@@ -26,4 +39,10 @@ export class ServiceDto {
 
   @Expose()
   content: string;
+
+  @Expose()
+  contentJP: string;
+
+  @Expose()
+  contentEN: string;
 }

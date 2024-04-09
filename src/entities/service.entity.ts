@@ -19,11 +19,23 @@ export class Service {
   @UpdateDateColumn()
   modifiedAt: Date;
 
-  @Column()
+  @Column({ default: "" })
   name: string;
+
+  @Column({ default: "" })
+  nameJP: string;
+
+  @Column({ default: "" })
+  nameEN: string;
 
   @Column()
   description: string;
+
+  @Column({ default: "" })
+  descriptionJP: string;
+
+  @Column({default: ""})
+  descriptionEN: string;
 
   @Column("longtext")
   featuredImage: string;
@@ -39,6 +51,12 @@ export class Service {
 
   @Column()
   content: string;
+
+  @Column()
+  contentJP: string;
+
+  @Column()
+  contentEN: string;
 
   @ManyToOne(() => User, (user) => user.createdServices)
   createdBy: User;

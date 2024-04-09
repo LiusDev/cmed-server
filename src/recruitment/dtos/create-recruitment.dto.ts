@@ -13,6 +13,15 @@ export class CreateRecruitmentDto {
   @IsNotEmpty()
   title: string;
 
+  @IsString()
+  @MaxLength(255)
+  titleJP: string;
+
+
+  @IsString()
+  @MaxLength(255)
+  titleEN: string;
+
   @IsDateString()
   @IsNotEmpty()
   deadline: Date;
@@ -20,4 +29,11 @@ export class CreateRecruitmentDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsString()
+  contentJP: string;
+
+  @IsString()
+  contentEN: string;
+  
 }
