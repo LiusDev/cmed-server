@@ -14,7 +14,7 @@ export class RecruitmentDto {
   title: string;
 
   @Expose()
-  titileJP: string;
+  titleJP: string;
 
   @Expose()
   titleEN: string;
