@@ -54,7 +54,7 @@ import { Service2Module } from './service2/service2.module';
         ConstService,
         Service2
       ],
-      synchronize: true,
+      synchronize: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     NewsModule,
