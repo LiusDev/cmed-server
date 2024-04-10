@@ -16,6 +16,13 @@ export class CategoryDto {
   name: string;
 
   @Expose()
+  nameJP: string;
+
+
+  @Expose()
+  nameEN: string
+
+  @Expose()
   news: NewDto;
 
   @Expose()

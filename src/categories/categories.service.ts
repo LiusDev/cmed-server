@@ -11,7 +11,7 @@ import { User } from 'src/entities/user.entity';
 export class CategoriesService {
   constructor(
     @InjectRepository(Category) private readonly repo: Repository<Category>,
-  ) {}
+  ) { }
 
   async findAll({
     name,
@@ -63,10 +63,10 @@ export class CategoriesService {
     newItem: CreateCategoryDto,
     createdUser: User,
   ): Promise<Category> {
-    const { name } = newItem;
+    const { name, nameEN, nameJP } = newItem;
 
     const item = this.repo.create({
-      name,
+      name, nameEN, nameJP,
       createdBy: createdUser,
     });
 
@@ -90,11 +90,11 @@ export class CategoriesService {
   }
 
   async delete(id: number): Promise<boolean> {
-    const item = await this.repo.findOne({where: {id}, relations: ["news"]});
+    const item = await this.repo.findOne({ where: { id }, relations: ["news"] });
     if (!item) {
       throw new NotFoundException('Category not found');
     }
-    if(item.news != null && item.news.length != 0) return false;
+    if (item.news != null && item.news.length != 0) return false;
     await this.repo.remove(item);
     return true;
   }

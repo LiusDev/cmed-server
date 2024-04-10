@@ -26,6 +26,12 @@ export class Category {
   @Column()
   name: string;
 
+  @Column()
+  nameJP: string
+
+  @Column()
+  nameEN: string
+
   @OneToMany(() => New, (news) => news.category)
   news: New[];
 
