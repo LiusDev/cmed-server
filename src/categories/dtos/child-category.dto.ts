@@ -12,4 +12,10 @@ export class ChildCategoryDto {
 
   @Expose()
   name: string;
+
+  @Expose()
+  nameJP: string;
+
+  @Expose()
+  nameEN: string;
 }
