@@ -21,39 +21,18 @@ import { SlidersModule } from './slider/slider.module';
 import { BannersModule } from './banner/slider/banner.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SettingModule } from './setting/setting.module';
-import { Document, Banner, Category, ConstService, Contact, Customer, Metadata, New, Partner, Project, ProjectImage, Recruitment, Service, Setting, Slider, Staff, User } from './entities';
-import { Service2 } from './entities/service2.entity';
 import { Service2Module } from './service2/service2.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as "mysql" | "mariadb" | "sqlite",
+      type: process.env.DB_TYPE as 'mysql' | 'mariadb' | 'sqlite',
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT) ?? 3306,
       password: process.env.DB_PASSWORD,
       username: process.env.DB_USERNAME,
       database: process.env.DB_DATABASE,
-      entities: [
-        Category,
-        Contact,
-        Customer,
-        Document,
-        Metadata,
-        New,
-        Partner,
-        Project,
-        ProjectImage,
-        Service,
-        Staff,
-        User,
-        Recruitment,
-        Slider,
-        Banner,
-        Setting,
-        ConstService,
-        Service2
-      ],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
@@ -76,9 +55,9 @@ import { Service2Module } from './service2/service2.module';
     CloudinaryModule,
     SettingModule,
     ServicesModule,
-    Service2Module
+    Service2Module,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
