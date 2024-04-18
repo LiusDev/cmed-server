@@ -25,6 +25,7 @@ import { Service2Module } from './service2/service2.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: process.env.DB_TYPE as 'mysql' | 'mariadb' | 'sqlite',
       host: process.env.DB_HOST,
@@ -35,7 +36,6 @@ import { Service2Module } from './service2/service2.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
     NewsModule,
     UsersModule,
     AuthModule,
